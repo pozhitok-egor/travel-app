@@ -35,6 +35,13 @@ class Main extends Component {
                 </Link>
               )
             }
+            { !this.props.pageLoader && !this.props.countries &&
+              <Content>
+                <h1>
+                  There are no countries found!
+                </h1>
+              </Content>
+            }
           </Content>
         <Footer />
       </Container>
