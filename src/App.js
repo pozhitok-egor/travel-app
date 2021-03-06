@@ -1,7 +1,13 @@
+import { Route, Switch } from "react-router";
+import { Main } from "./UI/main";
+import { Country } from "./UI/country";
+
 function App() {
   return (
-    <div className="App">
-    </div>
+    <Switch>
+      <Route exact path="/" component={Main} />
+      <Route path="/country/:id" component={Country} />
+    </Switch>
   );
 }
 
