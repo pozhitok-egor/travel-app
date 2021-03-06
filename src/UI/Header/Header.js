@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Header = (props) => {
   const { children } = props
   return (
     <HeaderBlock>
-      <Logo>Travel App</Logo>
+      <Link to="/"><Logo>Travel App</Logo></Link>
       {children}
     </HeaderBlock>
   )
@@ -31,6 +32,7 @@ const HeaderBlock = styled.div`
 const Logo = styled.div`
   font-family: 'Pacifico', cursive;
   font-size: 32px;
+  color: #262328;
   @media (max-width: 500px) {
     margin-bottom: 10px;
   }
