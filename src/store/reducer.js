@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { FETCH_COUNTRIES, FETCH_COUNTRY, LOADER_ACTIVATE, LOADER_DEACTIVATE } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY } from "./types";
 
 function countriesReducer(state = null, action) {
   switch (action.type) {
@@ -27,8 +27,17 @@ function countryReducer(state = null, action) {
   }
 }
 
+function searchReducer(state = null, action) {
+  switch (action.type) {
+    case SEARCH_COUNTRY:
+      return action.payload;
+    default: return state;
+  }
+}
+
 export const rootReducer = combineReducers({
   pageLoader: loaderReducer,
   countries: countriesReducer,
-  country: countryReducer
+  country: countryReducer,
+  search: searchReducer
 })
