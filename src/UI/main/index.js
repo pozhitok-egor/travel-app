@@ -16,6 +16,11 @@ class Main extends Component {
   }
 
   render() {
+    const countries = this.props.search ?
+      this.props.countries ?
+      this.props.countries.filter((value) => value.capital.toLowerCase().includes(this.props.search.toLowerCase()) || value.name.toLowerCase().includes(this.props.search.toLowerCase()))
+      : null
+    : this.props.countries;
     return (
       <Container>
         <Header><Search /></Header>
@@ -23,19 +28,19 @@ class Main extends Component {
             { this.props.pageLoader &&
               <PageLoader />
             }
-            { !this.props.pageLoader && this.props.countries &&
-              this.props.countries.map((country, index) =>
-                <Link to={`/country/${country.id}`} key={country.id}>
-                  <Card image={country.imageUrl}>
-                    <Info>
-                      <h2>{country.name}</h2>
-                      <p>{country.capital}</p>
-                    </Info>
-                  </Card>
-                </Link>
-              )
+            { !this.props.pageLoader && countries &&
+              countries.map((country, index) =>
+              <Link to={`/country/${country.id}`} key={country.id}>
+                <Card image={country.imageUrl}>
+                  <Info>
+                    <h2>{country.name}</h2>
+                    <p>{country.capital}</p>
+                  </Info>
+                </Card>
+              </Link>
+            )
             }
-            { !this.props.pageLoader && !this.props.countries &&
+            { !this.props.pageLoader && !countries &&
               <Content>
                 <h1>
                   There are no countries found!
@@ -71,7 +76,8 @@ const Info = styled.div`
 const mapStateToProps = (state) => {
   return {
     countries: state.countries,
-    pageLoader: state.pageLoader.active
+    pageLoader: state.pageLoader.active,
+    search: state.search
   }
 }
 
