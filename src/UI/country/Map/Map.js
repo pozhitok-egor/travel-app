@@ -153,11 +153,3 @@ const Point = styled.div`
     cursor: pointer;
   }
 `
-
-
-// <WidgetMap country={'RU'} lang={'cn'} /> // пример
-//country: china CN, United Arab Emirates AE,  Lithuania LT, Germany DE, Czech Republic CZ,  Ukraine UA, Russia RU,  Belarus BY, Poland PL
-// чтобы выбрать в какой стране будет стоять маркер
-
-//lang: ru - ressian, en - english, ch - china
-// чтобы выброать язык отображения карты
