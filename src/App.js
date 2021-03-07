@@ -1,6 +1,6 @@
 import { Route, Switch } from "react-router";
-import Main from "./UI/Main";
-import Country from "./UI/Country";
+import Main from "./UI/main";
+import Country from "./UI/country";
 import styled from 'styled-components';
 import styles from './styles.css';
 
