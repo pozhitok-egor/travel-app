@@ -58,6 +58,7 @@ const Card = styled.div`
   height: 170px;
   border-radius: 25px;
   background: ${(({image}) => `linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%), url(${image})`)};
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
   background-size: cover;
 `;
 
