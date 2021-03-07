@@ -23,7 +23,7 @@ class Country extends Component {
   render() {
     return (
       <Container>
-        <Header></Header>
+        <Header />
             { this.props.pageLoader &&
               <PageLoader />
             }
