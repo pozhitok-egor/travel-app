@@ -28,11 +28,6 @@ function getIcon(code) {
 
 const Weather = (props) => {
   const [data, setData] = useState(false);
-
-  console.log(
-    props,
-    data,
-  );
   
   useEffect(() => {
     const key = 'dca4631c560946108f0219caaf5b59d7';
@@ -56,7 +51,7 @@ const Weather = (props) => {
       { data &&
         <div className='wrap'>
           <div className='info'>
-            <div className='text'>{data.city_name}</div>
+            <div className='text'>{props.country.capital}</div>
             <div className='temp'>{`${Math.ceil(data.temp)}°`}</div>
             <div className='text'>{data.weather.description}</div>
           </div>
