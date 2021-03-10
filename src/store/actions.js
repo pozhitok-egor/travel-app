@@ -1,4 +1,4 @@
-import { FETCH_COUNTRIES, FETCH_COUNTRY, LOADER_ACTIVATE, LOADER_DEACTIVATE } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY } from "./types";
 import axios from "axios";
 
 export function loaderActivate() {
@@ -10,6 +10,13 @@ export function loaderActivate() {
 export function loaderDeactivate() {
   return {
     type: LOADER_DEACTIVATE
+  }
+}
+
+export function search(text) {
+  return {
+    type: SEARCH_COUNTRY,
+    payload: text !== "" ? text : null
   }
 }
 

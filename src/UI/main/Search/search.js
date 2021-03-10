@@ -1,17 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import searchIcon from '../../../assets/icons/search.svg';
+import { search } from '../../../store/actions';
 
 const Search = (props) => {
   return (
-    <SearchBlock>
-      <Input type="search" placeholder="Search" autocomplete="off" autoFocus/>
+    <SearchBlock onSubmit={(e) => e.preventDefault()}>
+      <Input type="search" onChange={(e) => props.search(e.target.value)} placeholder="Search" autocomplete="off" autoFocus/>
       <Icon src={searchIcon} alt="Search"/>
     </SearchBlock>
   )
 }
 
-export default Search;
+const mapDispatchToProps = {
+  search
+}
+
+export default connect(null, mapDispatchToProps)(Search);
 
 const SearchBlock = styled.form`
   display: flex;
