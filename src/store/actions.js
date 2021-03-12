@@ -1,4 +1,4 @@
-import { FETCH_COUNTRIES, FETCH_COUNTRY, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY } from "./types";
 import axios from "axios";
 
 export function loaderActivate() {
@@ -20,15 +20,22 @@ export function search(text) {
   }
 }
 
+export function fetchLanguage(lang) {
+  return {
+    type: FETCH_LANGUAGE,
+    payload: lang || "en",
+  }
+}
+
 export function fetchCountries() {
   return async dispatch => {
     dispatch(loaderActivate());
-    axios.get('https://travel-app-demo.herokuapp.com/countries/',{
+    axios.get('https://rs-school-travel-app.herokuapp.com/country',{
     headers: {
       accept: 'application/json'
     }
     }).then((res) => {
-      dispatch({type: FETCH_COUNTRIES, payload: res.data});
+      dispatch({type: FETCH_COUNTRIES, payload: res.data.countries});
       dispatch(loaderDeactivate());
     }).catch((err) => {
       dispatch({type: FETCH_COUNTRIES, payload: null});
@@ -40,7 +47,7 @@ export function fetchCountries() {
 export function fetchCountry(id) {
   return async dispatch => {
     dispatch(loaderActivate());
-    axios.get(`https://travel-app-demo.herokuapp.com/countries/${id}`,{
+    axios.get(`https://rs-school-travel-app.herokuapp.com/country/${id}`,{
     headers: {
       accept: 'application/json'
     }

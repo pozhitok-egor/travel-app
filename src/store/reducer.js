@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { FETCH_COUNTRIES, FETCH_COUNTRY, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY } from "./types";
 
 function countriesReducer(state = null, action) {
   switch (action.type) {
@@ -35,9 +35,18 @@ function searchReducer(state = null, action) {
   }
 }
 
+function languageReducer(state = localStorage.getItem("lang") || "en", action) {
+  switch (action.type) {
+    case FETCH_LANGUAGE:
+      return action.payload;
+    default: return state;
+  }
+}
+
 export const rootReducer = combineReducers({
   pageLoader: loaderReducer,
   countries: countriesReducer,
   country: countryReducer,
-  search: searchReducer
+  search: searchReducer,
+  language: languageReducer
 })
