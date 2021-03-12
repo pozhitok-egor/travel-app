@@ -67,6 +67,7 @@ margin: 15px 0 30px;
 `;
 const GalleryItem =styled.div`
 height: ${({isFullScren}) => isFullScren ? '70vh' : '200px' };
+outline: none;
 `;
 const GalleryItemImg =styled.img`
 max-height: 100%;
