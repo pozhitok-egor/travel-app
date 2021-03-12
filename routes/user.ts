@@ -12,7 +12,7 @@ router.get('/', upload.none(), extractJWT, user.getUser);
 router.post('/register', upload.none(), user.register, user.login);
 router.post('/login', upload.none(), user.login);
 router.put('/', upload.none(), extractJWT, user.update);
-router.post('/upload', upload.single('avatar'), extractJWT, user.addPhoto);
+router.put('/upload', upload.single('avatar'), extractJWT, user.addPhoto);
 router.get('/all', upload.none(), user.getAllUsers);
 router.get('/github', upload.none(), github.getData);
 
