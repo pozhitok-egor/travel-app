@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "env-cmd node ./dist/bin/www.js",
+    "start": "node ./dist/bin/www.js",
     "build": "tsc",
     "postinstall": "npm run build"
   },
@@ -19,10 +19,7 @@
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.12",
     "morgan": "~1.9.1",
-    "multer": "^1.4.2",
-    "pug": "2.0.0-beta11",
-    "uuid": "^8.3.2",
-    "validator": "^13.5.2"
+    "multer": "^1.4.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
