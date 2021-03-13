@@ -73,9 +73,7 @@ const upgradeCountry = async (req: Request, res: Response, next: NextFunction) =
 
 const addCountry = async (req: Request, res: Response, next: NextFunction) => {
 
-  const { name, capital, description, imageUrl, videoUrl, currency, ISOCode, border } = req.body;
-
-  console.log(req.body);
+  const { name, capital, description, imageUrl, videoUrl, currency, ISOCode, border, timezone } = req.body;
 
   const { token } = req.body;
   if ( token !== config.appToken ) {
@@ -85,12 +83,6 @@ const addCountry = async (req: Request, res: Response, next: NextFunction) => {
   }
 
   const { coordinates, type } = req.body.capitalLocation;
-
-  if (! (name && capital && description && imageUrl && videoUrl && currency && ISOCode && border && coordinates && type )) {
-    return res.status(400).json({
-      message: "Please, use correct data"
-    });
-  }
 
   const countryData = new Country({
     _id: new mongoose.Types.ObjectId(),
@@ -105,7 +97,8 @@ const addCountry = async (req: Request, res: Response, next: NextFunction) => {
     videoUrl,
     currency,
     ISOCode,
-    border
+    border,
+    timezone
   });
 
   countryData
