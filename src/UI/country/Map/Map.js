@@ -28,7 +28,7 @@ const Map = (props) => {
 
   const mapToken = setToken(props.lang)
   const mapStyle = setCountryLang(props.lang)
-  
+
   const [viewport, setViewport] = useState({
     latitude: props.country.capitalLocation.coordinates[1],
     longitude: props.country.capitalLocation.coordinates[0],
@@ -85,12 +85,12 @@ const Map = (props) => {
             longitude={props.country.capitalLocation.coordinates[0]}
             onClose={e => { setSelectedCapital(false) }}>
             <div>
-              {props.country.name + ', ' + props.country.capital}
+              {props.country.name[props.lang] + ', ' + props.country.capital[props.lang]}
             </div>
           </Popup>
         ) : null}
 
-        <Source id="my-data" type="geojson" data={props.country.border}>
+        <Source id="my-data" type="geojson" data={{type: "MultiPolygon", coordinates: props.country.border}}>
           <Layer {...layerStyle} />
         </Source>
         <FullScreenButton onClick={(e) => setFullScreen(!fullScreen)}>
@@ -104,7 +104,7 @@ const Map = (props) => {
 const mapStateToProps = (state) => {
   return {
     country: state.country,
-    lang: state.lang || 'ru'
+    lang: state.language
   }
 }
 
@@ -136,7 +136,7 @@ const FullScreenButton = styled.button`
   border-radius: 50px;
   border: none;
   background: transparent;
-  & img { 
+  & img {
     width: 200%;
     height: 200%;
   }
