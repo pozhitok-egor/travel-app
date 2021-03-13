@@ -44,7 +44,7 @@ export function fetchCountries() {
   }
 }
 
-export function fetchCountry(id) {
+export function fetchCountry(id, lang) {
   return async dispatch => {
     dispatch(loaderActivate());
     axios.get(`https://rs-school-travel-app.herokuapp.com/country/${id}`,{
@@ -52,9 +52,7 @@ export function fetchCountry(id) {
       accept: 'application/json'
     }
     }).then((res) => {
-      console.log(res.data)
-
-      dispatch(fetchWeather(`${res.data.country.capital.en}, ${res.data.country.ISOCode}`));
+      dispatch(fetchWeather(`${res.data.country.capital.en}, ${res.data.country.ISOCode}`, lang));
       dispatch({type: FETCH_COUNTRY, payload: res.data.country});
       dispatch({type: FETCH_PLACES, payload: res.data.places})
       dispatch(loaderDeactivate());
@@ -66,9 +64,9 @@ export function fetchCountry(id) {
   }
 }
 
-export function fetchWeather(city) {
+export function fetchWeather(city, lang) {
   return async dispatch => {
-    axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=049d6bfecf5f28f90a2cd75d513cb01f`,{
+    axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=049d6bfecf5f28f90a2cd75d513cb01f&lang=${lang}`,{
     headers: {
       accept: 'application/json'
     }
