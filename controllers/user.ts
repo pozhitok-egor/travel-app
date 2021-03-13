@@ -34,7 +34,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 
   const image = fs.readFileSync('./uploads/userAvatar.png');
 
-  const {username, password} = req.body;
+  const {username, password, url} = req.body;
 
   const errors = [];
 
@@ -82,7 +82,8 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
           image: {
             data: image,
             contentType: 'image/png'
-          }
+          },
+          accountUrl: url
         });
 
         _user
