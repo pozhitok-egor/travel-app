@@ -79,6 +79,8 @@ const WeatherBlock = styled.div`
   }
 
   & .info {
+    text-align: left;
+
     font-family: Balsamiq Sans;
     font-style: normal;
     font-weight: bold;
