@@ -36,12 +36,12 @@ function getTime(locale, timezone) {
 
 const DateTime = (props) => {
 
-  const [date, setDate] = useState(getDate('en-EN', 'Europe/Rome')); //тут везде на вход дать локаль и таймзону как появятся
-  const [time, setTime] = useState(getTime('en-EN', 'Europe/Rome'));
+  const [date, setDate] = useState(getDate(`${props.lang}-EN`, 'Europe/Rome')); //тут везде на вход дать локаль и таймзону как появятся
+  const [time, setTime] = useState(getTime(`${props.lang}-EN`, 'Europe/Rome'));
 
   useEffect(() => {
     const counter = setInterval(() => {
-      setTime(getTime('en-EN', 'Europe/Rome'));
+      setTime(getTime(`${props.lang}-EN`, 'Europe/Rome'));
     }, 1000);
 
     return () => clearInterval(counter);
@@ -59,6 +59,7 @@ const DateTime = (props) => {
 const mapStateToProps = (state) => {
   return {
     country: state.country,
+    lang: state.lang || 'ru'
   }
 }
 
