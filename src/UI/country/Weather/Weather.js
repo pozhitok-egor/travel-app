@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { PageLoader } from '../../PageLoader/PageLoader';
 import weatherFon from '../../../assets/weatherFon.svg';
+import { fetchWeather } from '../../../store/actions';
 
 const ICONS = {
-  cloudRainLightning: ['t01d', 't01n', 't02d', 't02n', 't03d', 't03n'],
-  cloudLightning: ['t04d', 't04n', 't05d', 't05n'],
-  snow: ['d01d', 'd01n', 'd02d', 'd02n', 'd03d', 'd03n', 's01d', 's01n', 's02d', 's02n', 's03d', 's03n', 's04d', 's04n', 's05d', 's05n', 's06d', 's06n'],
-  rain: ['r01d', 'r01n', 'r02d', 'r02n', 'r03d', 'r03n', 'r04d', 'r04n', 'r05d', 'r05n', 'r06d', 'r06n', 'f01d', 'f01n', 'u00d', 'u00n'],
-  cloud: ['a01d', 'a01n', 'a02d', 'a02n', 'a03d', 'a03n', 'a04d', 'a04n', 'a05d', 'a05n', 'a06d', 'a06n', 'c04d', 'c04n'],
-  sun: ['c01d'],
-  moon: ['c01n'],
-  cloudSun: ['c02d', 'c03d'],
-  cloudMoon: ['c02n', 'c03n'],
+  cloudRainLightning: ['11d','11n'],
+  cloudLightning: ['11d','11n'],
+  snow: ['13d', '13n'],
+  rain: ['10d', '09d', '10n', '09n'],
+  cloud: ['03d', '03n', '04d', '04n'],
+  sun: ['01d'],
+  moon: ['01d'],
+  cloudSun: ['02d', '03d'],
+  cloudMoon: ['02n', '03n'],
 };
 
 function getIcon(code) {
@@ -27,36 +28,20 @@ function getIcon(code) {
 }
 
 const Weather = (props) => {
-  const [data, setData] = useState(false);
-  
-  useEffect(() => {
-    const key = 'dca4631c560946108f0219caaf5b59d7';
-    const lat = props.country.capitalLocation.coordinates[1];
-    const lon = props.country.capitalLocation.coordinates[0];
-    const lang = 'en';
-
-    fetch(`https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=${key}&lang=${lang}`)
-      .then(response => response.json())
-      .then(data => {
-        setData(data.data[0]);
-      });
-  }, []); 
-
-
   return (
     <WeatherBlock>
-      { !data &&
+      { !props.weather &&
         <PageLoader />
       }
-      { data &&
+      { props.weather &&
         <div className='wrap'>
           <div className='info'>
-            <div className='text'>{props.country.capital}</div>
-            <div className='temp'>{`${Math.ceil(data.temp)}°`}</div>
-            <div className='text'>{data.weather.description}</div>
+            <div className='text'>{props.country.capital[props.lang]}</div>
+            <div className='temp'>{`${Math.ceil(props.weather.main.temp-273.15)}°`}</div>
+            <div className='text'>{props.weather.weather[0].description}</div>
           </div>
           <div className='icon'>
-            <img height="50" width="50" alt={data.weather.description} src={`${process.env.PUBLIC_URL}/weather/${getIcon(data.weather.icon)}`} />
+            <img height="50" width="50" alt={props.weather.weather.description} src={`${process.env.PUBLIC_URL}/weather/${getIcon(props.weather.weather[0].icon)}`} />
           </div>
         </div>
       }
@@ -67,10 +52,16 @@ const Weather = (props) => {
 const mapStateToProps = (state) => {
   return {
     country: state.country,
+    lang: state.language,
+    weather: state.weather
   }
 }
 
-export default connect(mapStateToProps, null)(Weather);
+const mapDispatchToProps = {
+  fetchWeather
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Weather);
 
 const WeatherBlock = styled.div`
   margin-bottom: 10px;
@@ -81,7 +72,7 @@ const WeatherBlock = styled.div`
     justify-content: space-between;
     padding: 40px;
 
-    background: 
+    background:
       url('${weatherFon}') center/cover no-repeat,
       linear-gradient(360deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 100%), #1E5686;
     border-radius: 25px;

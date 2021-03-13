@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Container from '../Container';
 import Footer from '../Footer';
 import Header from '../Header';
-import { fetchCountry } from '../../store/actions';
+import { fetchCountry, fetchWeather } from '../../store/actions';
 import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
 import styled from 'styled-components';
@@ -30,8 +30,8 @@ class Country extends Component {
             { !this.props.pageLoader && this.props.country &&
             <Content>
               <MainBlock>
-                <h1>{this.props.country.name}</h1>
-                <p>{this.props.country.capital}</p>
+                <h1>{this.props.country.name[this.props.lang]}</h1>
+                <p>{this.props.country.capital[this.props.lang]}</p>
                 <Description />
                 <Gallery />
                 <Video />
@@ -77,14 +77,15 @@ const Sidebar = styled.div`
 
 const mapStateToProps = (state) => {
   return {
-    countries: state.countries,
     pageLoader: state.pageLoader.active,
-    country: state.country
+    country: state.country,
+    lang: state.language
   }
 }
 
 const mapDispatchToProps = {
-  fetchCountry
+  fetchCountry,
+  fetchWeather
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Country);

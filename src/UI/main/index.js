@@ -4,7 +4,7 @@ import Container from '../Container';
 import Footer from '../Footer';
 import Header from '../Header';
 import Search from './Search';
-import { fetchCountries } from '../../store/actions';
+import { fetchCountries, fetchLanguage } from '../../store/actions';
 import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
 import styled from 'styled-components';
@@ -30,11 +30,11 @@ class Main extends Component {
             }
             { !this.props.pageLoader && countries &&
               countries.map((country, index) =>
-              <Link to={`/country/${country.id}`} key={country.id}>
+              <Link to={`/country/${country._id}`} key={country._id}>
                 <Card image={country.imageUrl}>
                   <Info>
-                    <h2>{country.name}</h2>
-                    <p>{country.capital}</p>
+                    <h2>{country.name[this.props.lang]}</h2>
+                    <p>{country.capital[this.props.lang]}</p>
                   </Info>
                 </Card>
               </Link>
@@ -77,12 +77,14 @@ const mapStateToProps = (state) => {
   return {
     countries: state.countries,
     pageLoader: state.pageLoader.active,
-    search: state.search
+    search: state.search,
+    lang: state.language
   }
 }
 
 const mapDispatchToProps = {
-  fetchCountries
+  fetchCountries,
+  fetchLanguage
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
