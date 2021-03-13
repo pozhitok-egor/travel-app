@@ -32,7 +32,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
 
-  const image = fs.readFileSync('uploads/userAvatar.png');
+  const image = fs.readFileSync('./uploads/userAvatar.png');
 
   const {username, password} = req.body;
 
@@ -79,7 +79,10 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
           _id: new mongoose.Types.ObjectId(),
           username,
           password: hash,
-          image
+          image: {
+            data: image,
+            contentType: 'image/png'
+          }
         });
 
         _user
@@ -211,10 +214,23 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const addPhoto = async (req: Request, res: Response, next: NextFunction) => {
-  const image = req.file.buffer;
-  User.findOneAndUpdate({ _id: res.locals.jwt.id }, {image})
+  if (!req.file) {
+    return res.status(500).json({
+      message: "Cannot find file"
+    });
+  }
+  User.findOneAndUpdate({ _id: res.locals.jwt.id }, {
+    image: {
+      data: fs.readFileSync(`./uploads/${req.file.filename}`),
+      contentType: 'image/png'
+    }
+  })
   .exec()
   .then(() => {
+    fs.unlink(`./uploads/${req.file.filename}`, (err) => {
+      if(err) logger.error('FILE UPLOAD','Cannot delete file', err);
+      logger.info('FILE UPLOAD', 'File deleted successfully');
+    })
     return res.status(202).json({
       message: "User updated"
     });

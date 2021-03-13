@@ -5,7 +5,7 @@ const userSchema: mongoose.Schema = new mongoose.Schema(
   {
     username: { type: String, required: true },
     password: { type: String, required: true },
-    image: { data: Buffer, required: true },
+    image: { contentType: String , data: Buffer },
     accountUrl: { type: String, required: false }
   },
   {
