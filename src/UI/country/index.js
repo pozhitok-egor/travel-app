@@ -17,7 +17,7 @@ import Map from './Map';
 
 class Country extends Component {
   componentDidMount() {
-    this.props.fetchCountry(this.props.match.params.id)
+    this.props.fetchCountry(this.props.match.params.id, this.props.lang)
   }
 
   render() {
