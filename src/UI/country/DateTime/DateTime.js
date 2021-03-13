@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { withNamespaces } from 'react-i18next';
 
 function getDate(locale, timezone) {
   const date = new Date();
@@ -48,7 +49,7 @@ const DateTime = (props) => {
 
   return (
     <DateTimeWrap>
-      <DateTimeTitle>Date & time:</DateTimeTitle>
+      <DateTimeTitle>{props.t('date_and_time')}:</DateTimeTitle>
       <TimeWrap>{`${time.hour}:${time.minute}:${time.second}`}</TimeWrap>
       <DateWrap>{`${date.weekday}, ${date.day} ${date.month}`}</DateWrap>
     </DateTimeWrap>
@@ -61,7 +62,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, null)(DateTime);
+export default connect(mapStateToProps, null)(withNamespaces()(DateTime));
 
 const DateTimeWrap =  styled.div`
   margin-bottom: 10px;

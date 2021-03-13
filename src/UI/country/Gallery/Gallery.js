@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
-const Gallery = () => {
+const Gallery = (props) => {
   return (
     <div>
-      Gallery
+      {props.t('gallery')}
     </div>
   )
 }
 
-export default connect(null, null)(Gallery);
+export default connect(null, null)(withNamespaces()(Gallery));

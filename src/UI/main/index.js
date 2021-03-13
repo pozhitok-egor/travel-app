@@ -9,6 +9,7 @@ import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { withNamespaces } from 'react-i18next';
 
 class Main extends Component {
   componentDidMount() {
@@ -43,7 +44,7 @@ class Main extends Component {
             { !this.props.pageLoader && !countries &&
               <Content>
                 <h1>
-                  There are no countries found!
+                  {this.props.t('no_countries')}
                 </h1>
               </Content>
             }
@@ -85,4 +86,4 @@ const mapDispatchToProps = {
   fetchCountries
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(Main));

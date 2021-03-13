@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
-const Currency = () => {
+const Currency = (props) => {
   return (
     <div>
-      Currency
+      {props.t('сurrency')}
     </div>
   )
 }
 
-export default connect(null, null)(Currency);
+export default connect(null, null)(withNamespaces()(Currency));

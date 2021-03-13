@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
-const Description = () => {
+const Description = (props) => {
   return (
     <div>
-      Description
+      {props.t('description')}
     </div>
   )
 }
 
-export default connect(null, null)(Description);
+export default connect(null, null)(withNamespaces()(Description));
