@@ -1,37 +1,41 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { PageLoader } from '../../PageLoader/PageLoader';
+import { fetchCurrency } from '../../../store/actions';
+
 
 const Currency = (props) => {
-  const [currency, setCurrency] = useState(false);
-  
-  useEffect(() => {
-    fetch(`https://api.exchangeratesapi.io/latest?base=${props.country.currency}`)
-      .then(response => response.json())
-      .then(data => {
-        setCurrency(data);
-      });
-  }, []); 
+  function prepCurrency(currency) {
+    if (currency === props.country.currency) {
+      return (currency === 'RUB') ? '100' : '1';
+    }
 
+    const rates = (currency === 'RUB') ? (props.currency.rates[currency] / 100) : props.currency.rates[currency];
+    return (rates < 0.01) ? `<${rates.toFixed(2)}` : rates.toFixed(2);
+  }
+  
   return (
     <CurrencyBlock>
-      { !currency &&
+      { !props.currency &&
         <PageLoader />
       }
-      { currency &&
+      { props.currency && props.currency.isAxiosError &&
+        <div>No currency state</div>
+      }
+      { props.currency && !props.currency.isAxiosError &&
         <CurrencyWrap>
           <CurrencyItem>
             <div>1 USD</div>
-            <div>{(props.country.currency === 'USD') ? '1' : currency.rates.USD.toFixed(2)}</div>
+            <div>{prepCurrency('USD')}</div>
           </CurrencyItem>
           <CurrencyItem>
             <div>1 EUR</div>
-            <div>{(props.country.currency === 'EUR') ? '1' : currency.rates.EUR.toFixed(2)}</div>
+            <div>{prepCurrency('EUR')}</div>
           </CurrencyItem>
           <CurrencyItem>
             <div>100 RUB</div>
-            <div>{(props.country.currency === 'RUB') ? '100' : (currency.rates.RUB / 100).toFixed(2)}</div>
+            <div>{prepCurrency('RUB')}</div>
           </CurrencyItem>
         </CurrencyWrap>
       }
@@ -42,10 +46,15 @@ const Currency = (props) => {
 const mapStateToProps = (state) => {
   return {
     country: state.country,
+    currency: state.currency
   }
 }
 
-export default connect(mapStateToProps, null)(Currency);
+const mapDispatchToProps = {
+  fetchCurrency
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Currency);
 
 const CurrencyBlock = styled.div`
   margin-bottom: 10px;
