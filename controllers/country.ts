@@ -51,7 +51,7 @@ const getCountry = async (req: Request, res: Response, next: NextFunction) => {
 const upgradeCountry = async (req: Request, res: Response, next: NextFunction) => {
   const { token } = req.body;
   if ( token !== config.appToken ) {
-    return res.status(401).json({
+    return res.status(403).json({
       message: "Unauthorized"
     });
   }
@@ -75,9 +75,15 @@ const addCountry = async (req: Request, res: Response, next: NextFunction) => {
 
   const { name, capital, description, imageUrl, videoUrl, currency, ISOCode, border, timezone } = req.body;
 
+  if ( !timezone[0] || !timezone[1] || timezone[1] < -90 || timezone[1] > 90 ) {
+    return res.status(400).json({
+      message: "Timezone must be Array [longtitude, latitude], latitute must be in [-90, 90]"
+    });
+  }
+
   const { token } = req.body;
   if ( token !== config.appToken ) {
-    return res.status(401).json({
+    return res.status(403).json({
       message: "Unauthorized"
     });
   }
