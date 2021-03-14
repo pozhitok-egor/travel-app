@@ -23,6 +23,23 @@ const getRating = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
+const getUserRating = async (req: Request, res: Response, next: NextFunction) => {
+  Rating.findOne({userId: res.locals.jwt.id, placeId: req.params.id})
+  .exec()
+  .then((rating) => {
+    return res.status(200).json({
+      rating
+    });
+  })
+  .catch((error) => {
+    logger.error(NAMESPACE, error.message, error);
+    return res.status(500).json({
+      message: error.message,
+      error
+    });
+  })
+}
+
 const upgradeRating = async (req: Request, res: Response, next: NextFunction) => {
   const { rating, placeId } = req.body
   Rating.findOneAndUpdate({userId: res.locals.jwt.id, placeId}, { rating })
@@ -99,6 +116,7 @@ const recalculate = async (req: Request, res: Response, next: NextFunction) => {
 
 export default {
   getRating,
+  getUserRating,
   upgradeRating,
   addRating
 };
