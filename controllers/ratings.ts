@@ -7,11 +7,17 @@ import places from "../models/places";
 const NAMESPACE = "RATING";
 
 const getRating = async (req: Request, res: Response, next: NextFunction) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(500).json({
+      message: 'id must be a single String of 12 bytes or a string of 24 hex characters'
+    });
+  }
+  const placeId = mongoose.Types.ObjectId(req.params.id);
   Rating.aggregate(
     [
     {
       "$match": {
-        "placeId": new mongoose.Types.ObjectId(req.params.id)
+        "placeId": placeId
       }
     },
     {
@@ -125,8 +131,8 @@ const addRating = async (req: Request, res: Response, next: NextFunction) => {
       } else {
         const ratingData = new Rating({
           _id: new mongoose.Types.ObjectId(),
-          userId: new mongoose.Types.ObjectId(res.locals.jwt.id),
-          placeId: new mongoose.Types.ObjectId(req.params.id),
+          userId: mongoose.Types.ObjectId(res.locals.jwt.id),
+          placeId: mongoose.Types.ObjectId(req.params.id),
           rating
         });
 
@@ -136,7 +142,7 @@ const addRating = async (req: Request, res: Response, next: NextFunction) => {
           Rating.aggregate([
             {
               "$match": {
-                "placeId": new mongoose.Types.ObjectId(req.params.id)
+                "placeId": mongoose.Types.ObjectId(req.params.id)
               }
             },
             {
