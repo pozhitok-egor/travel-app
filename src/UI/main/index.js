@@ -9,6 +9,7 @@ import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import User from '../User';
 
 class Main extends Component {
   componentDidMount() {
@@ -23,7 +24,7 @@ class Main extends Component {
     : this.props.countries;
     return (
       <Container>
-        <Header><Search /></Header>
+        <Header><Search /><User /></Header>
           <Content>
             { this.props.pageLoader &&
               <PageLoader />
