@@ -3,14 +3,17 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import { Rating } from '@material-ui/lab';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { useEffect } from 'react';
+import { PageLoader } from '../../PageLoader/PageLoader';
 
 const settingsInit = {
   dots: true,
   infinite: true,
   speed: 500,
-  slidesToShow: 2,
+  slidesToShow: 1,
   slidesToScroll: 1,
   nextArrow: <SampleNextArrow />,
   prevArrow: <SamplePrevArrow />,
@@ -28,36 +31,60 @@ const settingsInit = {
     }]
 };
 
-const Gallery = (props) => {
+const Gallery = ({places, lang}) => { 
   const [settings,setSettings] = useState(settingsInit);
   const handle = useFullScreenHandle();
+  const [pageLoader, setPageLoader] = useState(true);
+
+  useEffect(()=> {
+    if(places === 1) setSettings(prev=>{return {...prev, slidesToShow:1,  nextArrow: <SampleNextArrow isFullScren={true}/>, prevArrow: <SamplePrevArrow isFullScren={true}/>}})
+    places.forEach((el, index) => {
+      const src = el.imageUrl  
+      const primaryImage = new Image() 
+      primaryImage.onload = () => { 
+        console.log(`image #${index + 1} is loaded!`)
+        //const images = [...this.state.images] 
+        //images[index].src = src 
+        setPageLoader(false)
+      }
+      primaryImage.src = src 
+    })
+  },[places])
+  
   const handleClickImg = ()=> {
     if(!handle.active) handle.enter(); 
     else return 0
   }
 
   const handleChangeFullScrenn =(state)=> {
-    if(window.innerWidth> 700) {
+    if(window.innerWidth> 700 && places.length>1) {
       if(state) setSettings(prev=>{return {...prev, slidesToShow:1,  nextArrow: <SampleNextArrow isFullScren={true}/>, prevArrow: <SamplePrevArrow isFullScren={true}/>}})
       else setSettings(prev=>{return {...prev, slidesToShow:2,  nextArrow: <SampleNextArrow isFullScren={false}/>, prevArrow: <SamplePrevArrow isFullScren={false}/> }})
     }
-  }
-  
+  }  
   return (
     <GalleryBlock>
-      <div>Gallery</div>     
+      { pageLoader && places.length ? 
+              <PageLoader /> :
       <FullScreen handle={handle} onChange={handleChangeFullScrenn}>
         <Slider {...settings}>
-        {props.places.map((el,i) => {
+        {places.map((el,i) => {
           return <GalleryItem key={i} isFullScren={handle.active}>
-            <GalleryItemImg src={el.photoUrl} alt={el.name} onClick={handleClickImg} isFullScren={handle.active}></GalleryItemImg>
-            <Name>{el.name}</Name>
-            {handle.active ?<Description isFullScren={handle.active}>{el.description}</Description>: null}
+            <GalleryItemImg src={el.imageUrl} alt={el.name[lang]} onClick={handleClickImg} isFullScren={handle.active}></GalleryItemImg>
+            <Name>{el.name[lang]}</Name>
+            {handle.active ?<Description isFullScren={handle.active}>{el.description[lang]}</Description>: null}
+            <Rating
+              name="simple-controlled"
+              value={el.rating}
+              onChange={(event, newValue) => {
+          }}
+        />
           </GalleryItem>
         })}
         </Slider>
         {handle.active ? <ExitButton onClick={handle.exit}></ExitButton> : null}
       </FullScreen>
+      }
     </GalleryBlock>    
   )
 }
@@ -136,7 +163,8 @@ function SamplePrevArrow (props) {
 }
 const mapStateToProps = (state) => {
   return {
-    places: state.country.places
+    places: state.places,
+    lang: state.language
   }
 }
 
