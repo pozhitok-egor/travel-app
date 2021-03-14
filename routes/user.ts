@@ -14,6 +14,5 @@ router.post('/login', upload.none(), user.login);
 router.put('/', upload.none(), extractJWT, user.update);
 router.put('/upload', upload.single('avatar'), extractJWT, user.addPhoto);
 router.get('/all', upload.none(), user.getAllUsers);
-router.get('/github', upload.none(), github.getData);
 
 export default router;

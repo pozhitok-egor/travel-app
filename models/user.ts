@@ -6,7 +6,10 @@ const userSchema: mongoose.Schema = new mongoose.Schema(
     username: { type: String, required: true },
     password: { type: String, required: true },
     image: { contentType: String , data: Buffer },
-    accountUrl: { type: String, required: false }
+    accountUrl: { type: String, required: false },
+    social: {
+      github: { type: String, required: false }
+    }
   },
   {
     timestamps: true

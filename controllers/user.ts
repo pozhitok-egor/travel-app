@@ -36,29 +36,29 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 
   const {username, password, url} = req.body;
 
-  const errors = [];
+  let error = '';
 
   if (username.length < 4) {
-      errors.push("Your username must be at least 4 characters");
+    error = "Your username must be at least 4 characters";
   }
   if (username.search(/[a-z]/i) < 0) {
-      errors.push("Your username must contain at least one letter.");
+    error = "Your username must contain at least one letter.";
   }
 
   if (password.length < 8) {
-      errors.push("Your password must be at least 8 characters");
+    error = "Your password must be at least 8 characters";
   }
   if (password.search(/[a-z]/i) < 0) {
-      errors.push("Your password must contain at least one letter.");
+    error = "Your password must contain at least one letter.";
   }
   if (password.search(/[0-9]/) < 0) {
-      errors.push("Your password must contain at least one digit.");
+    error = "Your password must contain at least one digit.";
   }
-  if (errors.length > 0) {
-      return res.status(500).json({
-        message: errors.join("\n"),
-        error: errors.join("\n"),
-      });
+  if (error != '') {
+    return res.status(500).json({
+      message: error,
+      error: error,
+    });
   }
 
   bcryptjs.hash(password, 10, (hashError, hash) => {
@@ -196,9 +196,49 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const update = async (req: Request, res: Response, next: NextFunction) => {
-  const {image, accountUrl} = req.body;
+  const { username, accountUrl, password } = req.body;
 
-  User.findOneAndUpdate({ _id: res.locals.jwt.id }, {image, accountUrl})
+  if ( username ) {
+    let error = '';
+
+    if ( username.length < 4 ) {
+      error = "Your username must be at least 4 characters";
+    }
+    if ( username.search(/[a-z]/i) < 0 ) {
+      error = "Your username must contain at least one letter.";
+    }
+
+    if ( error != '' ) {
+      return res.status(500).json({
+        message: error,
+        error: error,
+      });
+    }
+  }
+
+  if ( password ) {
+    let error = '';
+
+    if ( password.length < 8 ) {
+      error = "Your password must be at least 8 characters";
+    }
+    if ( password.search(/[a-z]/i) < 0 ) {
+      error = "Your password must contain at least one letter.";
+    }
+    if ( password.search(/[0-9]/) < 0 ) {
+      error = "Your password must contain at least one digit.";
+    }
+    if ( error != '' ) {
+      return res.status(500).json({
+        message: error,
+        error: error,
+      });
+    }
+  }
+
+  const hashedPassword = password && await bcryptjs.hash(password,10);
+
+  User.findOneAndUpdate({ _id: res.locals.jwt.id }, { username, accountUrl, password: hashedPassword })
   .exec()
   .then((user) => {
     return res.status(200).json({
