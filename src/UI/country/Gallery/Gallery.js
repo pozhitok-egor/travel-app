@@ -42,9 +42,6 @@ const Gallery = ({places, lang}) => {
       const src = el.imageUrl  
       const primaryImage = new Image() 
       primaryImage.onload = () => { 
-        console.log(`image #${index + 1} is loaded!`)
-        //const images = [...this.state.images] 
-        //images[index].src = src 
         setPageLoader(false)
       }
       primaryImage.src = src 
@@ -135,14 +132,14 @@ opacity: 0.3;
 }
 `
 const NextArrow = styled.div `
-right: ${({isFullScren})=> isFullScren? "15px": "-25px"};
+right: ${({isFullScren})=> isFullScren? "15px": "-10px"};
 &:before {
   color: ${({isFullScren})=> isFullScren? "#fff": "#000"};
   font-size: 30px;
 }
 `
 const PrevArrow = styled.div `
-left: ${({isFullScren})=> isFullScren? "15px": "-35px"};
+left: ${({isFullScren})=> isFullScren? "15px": "-25px"};
 &:before {
   color: ${({isFullScren})=> isFullScren? "#fff": "#000"};
   font-size: 30px;
