@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { PageLoader } from '../../PageLoader/PageLoader';
 import weatherFon from '../../../assets/weatherFon.svg';
-import { fetchWeather } from '../../../store/actions';
 
 const ICONS = {
   cloudRainLightning: ['11d','11n'],
@@ -12,7 +11,7 @@ const ICONS = {
   rain: ['10d', '09d', '10n', '09n'],
   cloud: ['03d', '03n', '04d', '04n'],
   sun: ['01d'],
-  moon: ['01d'],
+  moon: ['01n'],
   cloudSun: ['02d', '03d'],
   cloudMoon: ['02n', '03n'],
 };
@@ -57,11 +56,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = {
-  fetchWeather
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Weather);
+export default connect(mapStateToProps, null)(Weather);
 
 const WeatherBlock = styled.div`
   margin-bottom: 10px;
