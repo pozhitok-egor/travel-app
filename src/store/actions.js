@@ -1,4 +1,5 @@
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER } from "./types";
+
 import axios from "axios";
 
 export function loaderActivate() {
@@ -79,6 +80,25 @@ export function fetchWeather(city, lang) {
   }
 }
 
+export function fetchUser(token) {
+  return async dispatch => {
+    dispatch(loaderActivate());
+    axios.get(`https://rs-school-travel-app.herokuapp.com/user/`,{
+    headers: {
+      'accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+    }).then((res) => {
+      dispatch({type: FETCH_USER, payload: res.data.user});
+      dispatch(loaderDeactivate());
+    }).catch((err) => {
+      dispatch({type: FETCH_USER, payload: null});
+      localStorage.removeItem('token');
+      dispatch(loaderDeactivate());
+    })
+  }
+}
+
 export function fetchCurrency(currency) {
   return async dispatch => {
     axios.get(`https://api.exchangeratesapi.io/latest?base=${currency}`,{
@@ -93,16 +113,28 @@ export function fetchCurrency(currency) {
   }
 }
 
-// export function fetchWeather(lat, lon, lang) {
-//   return async dispatch => {
-//     axios.get(`https://api.weatherbit.io/v2.0/current?lat=${lat}&lon=${lon}&key=dca4631c560946108f0219caaf5b59d7&lang=${lang}`,{
-//     headers: {
-//       accept: 'application/json'
-//     }
-//     }).then((res) => {
-//       dispatch({type: FETCH_WEATHER, payload: res.data.data[0]});
-//     }).catch((err) => {
-//       dispatch({type: FETCH_WEATHER, payload: null});
-//     })
-//   }
-// }
+export function setUser(user) {
+  return {
+    type: SET_USER,
+    payload: user
+  }
+}
+
+export function signOut() {
+  localStorage.removeItem('token');
+  return {
+    type: SIGN_OUT,
+  }
+}
+
+export function setLogin() {
+  return {
+    type: SET_LOGIN,
+  }
+}
+
+export function setRegistration() {
+  return {
+    type: SET_REGISTRATION,
+  }
+}
