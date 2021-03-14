@@ -2,6 +2,7 @@
 import logger from "../common/logger";
 import * as mongoose from "mongoose";
 import Rating from "../models/ratings";
+import places from "../models/places";
 
 const NAMESPACE = "RATING";
 
@@ -41,8 +42,8 @@ const getUserRating = async (req: Request, res: Response, next: NextFunction) =>
 }
 
 const upgradeRating = async (req: Request, res: Response, next: NextFunction) => {
-  const { rating, placeId } = req.body
-  Rating.findOneAndUpdate({userId: res.locals.jwt.id, placeId}, { rating })
+  const { rating } = req.body
+  Rating.findOneAndUpdate({userId: res.locals.jwt.id, placeId: req.params.id}, { rating })
   .exec()
   .then(() => {
     return res.status(202).json({
@@ -59,18 +60,36 @@ const upgradeRating = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 const addRating = async (req: Request, res: Response, next: NextFunction) => {
-  const { placeId, rating } = req.body;
+  const { rating } = req.body;
 
-  Rating.findOne({ placeId, userId: res.locals.jwt.id})
+  await places.findOne({_id: req.params.id})
+  .exec()
+  .then((place) => {
+    if (!place) {
+      return res.status(404).json({
+        message: "Place not found",
+        error: "Place not found"
+      });
+    }
+  })
+  .catch((error) => {
+    logger.error(NAMESPACE, error.message, error);
+    return res.status(500).json({
+      message: error.message,
+      error,
+    });
+  })
+
+  Rating.findOne({ placeId: req.params.id, userId: res.locals.jwt.id})
     .exec()
-    .then((rating) => {
-      if (rating) {
+    .then((ratings) => {
+      if (ratings) {
         next();
       } else {
         const ratingData = new Rating({
           _id: new mongoose.Types.ObjectId(),
           userId: res.locals.jwt.id,
-          placeId,
+          placeId: req.params.id,
           rating
         });
 
