@@ -5,10 +5,8 @@ import Auth from './UI/authorization';
 import styled from 'styled-components';
 import styles from './styles.css';
 import { connect } from 'react-redux';
-// import Callback from './UI/authorization/Callback';
 
 const App = ( props ) => {
-  console.log('вызов апп');
   return (
     <AppBlock style={styles}>
       <Switch>

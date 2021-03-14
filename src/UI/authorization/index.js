@@ -9,11 +9,9 @@ import { fetchUser } from '../../store/actions';
 import Registration from './Registration';
 import Login from './Login';
 import queryString from 'querystring';
-import axios from 'axios';
 import { Redirect } from 'react-router';
 
 const Auth = (props) => {
-  console.log('auth')
   const data = queryString.parse(props.location.search.substring(1));
   const token = data.token || localStorage.getItem('token');
   if ( token && !props.pageLoader && !props.user) {
