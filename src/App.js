@@ -12,8 +12,8 @@ const App = ( props ) => {
       <Switch>
         { !props.user && <Redirect exact path='/' to='/auth' /> }
         { props.user && <Route exact path='/' component={Main} /> }
+        { props.user && <Route path='/country/:id' component={Country} />}
         <Route path='/auth' component={Auth} />
-        <Route path='/country/:id' component={Country} />
       </Switch>
     </AppBlock>
   )

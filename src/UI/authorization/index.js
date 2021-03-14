@@ -13,6 +13,9 @@ import { Redirect } from 'react-router';
 
 const Auth = (props) => {
   const data = queryString.parse(props.location.search.substring(1));
+  if (data.token) {
+    localStorage.setItem('token', data.token);
+  }
   const token = data.token || localStorage.getItem('token');
   if ( token && !props.pageLoader && !props.user) {
     props.fetchUser(token);
