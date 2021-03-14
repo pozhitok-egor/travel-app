@@ -1,4 +1,4 @@
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_PLACES } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES } from "./types";
 import axios from "axios";
 
 export function loaderActivate() {
@@ -55,6 +55,7 @@ export function fetchCountry(id) {
       console.log(res.data)
 
       dispatch(fetchWeather(`${res.data.country.capital.en}, ${res.data.country.ISOCode}`));
+      dispatch(fetchCurrency(res.data.country.currency));
       dispatch({type: FETCH_COUNTRY, payload: res.data.country});
       dispatch({type: FETCH_PLACES, payload: res.data.places})
       dispatch(loaderDeactivate());
@@ -76,6 +77,20 @@ export function fetchWeather(city) {
       dispatch({type: FETCH_WEATHER, payload: res.data});
     }).catch((err) => {
       dispatch({type: FETCH_WEATHER, payload: null});
+    })
+  }
+}
+
+export function fetchCurrency(currency) {
+  return async dispatch => {
+    axios.get(`https://api.exchangeratesapi.io/latest?base=${currency}`,{
+    headers: {
+      accept: 'application/json'
+    }
+    }).then((res) => {
+      dispatch({type: FETCH_CURRENCY, payload: res.data});
+    }).catch((err) => {
+      dispatch({type: FETCH_CURRENCY, payload: err});
     })
   }
 }

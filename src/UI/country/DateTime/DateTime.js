@@ -23,7 +23,6 @@ function getTime(locale, timezone) {
     second: date.toLocaleString(locale, { second: 'numeric', timeZone: timezone }),
   };
 
-  objTime.hour = (objTime.hour < 10) ? `0${objTime.hour}` : `${objTime.hour}`;
   objTime.hour = (objTime.hour > 23) ? `00` : `${objTime.hour}`; //прикол
   objTime.minute = (objTime.minute < 10) ? `0${objTime.minute}` : `${objTime.minute}`;
   objTime.second = (objTime.second < 10) ? `0${objTime.second}` : `${objTime.second}`;
@@ -50,7 +49,16 @@ const DateTime = (props) => {
   return (
     <DateTimeWrap>
       <DateTimeTitle>Date & time:</DateTimeTitle>
-      <TimeWrap>{`${time.hour}:${time.minute}:${time.second}`}</TimeWrap>
+      <TimeWrap>
+        <span>{time.hour[0]}</span>
+        <span>{time.hour[1]}</span>
+        :
+        <span>{time.minute[0]}</span>
+        <span>{time.minute[1]}</span>
+        :
+        <span>{time.second[0]}</span>
+        <span>{time.second[1]}</span>
+      </TimeWrap>
       <DateWrap>{`${date.weekday}, ${date.day} ${date.month}`}</DateWrap>
     </DateTimeWrap>
   )
@@ -79,11 +87,22 @@ const DateTimeTitle =  styled.div`
 `;
 
 const TimeWrap =  styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   font-family: Montserrat;
   font-style: normal;
   font-weight: normal;
   font-size: 48px;
   line-height: 59px;
+
+  & span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+  }
 `;
 
 const DateWrap =  styled.div`
