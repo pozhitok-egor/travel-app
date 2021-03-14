@@ -16,7 +16,9 @@ export default Header;
 
 const HeaderBlock = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
   align-items: center;
   padding: 10px 20px;
   margin: 0 auto;
