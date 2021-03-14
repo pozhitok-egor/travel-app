@@ -1,10 +1,11 @@
+import { ObjectId } from 'bson';
 import * as mongoose from 'mongoose';
 import IRatings from './interfaces/ratings';
 
 const ratingsSchema: mongoose.Schema = new mongoose.Schema(
   {
-    placeId: { type: String, required: true },
-    userId: { type: String, required: true },
+    placeId: { type: ObjectId, required: true },
+    userId: { type: ObjectId, required: true },
     rating: { type: Number, required: true }
   },
   {

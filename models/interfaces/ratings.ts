@@ -1,7 +1,8 @@
+import { ObjectId } from "bson";
 import { Document } from "mongoose";
 
 export default interface IRatings extends Document {
-  placeId: string;
-  userId: string;
+  placeId: ObjectId;
+  userId: ObjectId;
   rating: number;
 }

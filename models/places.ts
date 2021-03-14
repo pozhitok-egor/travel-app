@@ -1,3 +1,4 @@
+import { ObjectId } from 'bson';
 import * as mongoose from 'mongoose';
 import IPlaces from './interfaces/places';
 
@@ -9,7 +10,7 @@ const localization = {
 
 const placesSchema: mongoose.Schema = new mongoose.Schema(
   {
-    countryId: { type: String, required: true },
+    countryId: { type: ObjectId, required: true },
     name: localization,
     description: localization,
     imageUrl: { type: String, required: true },

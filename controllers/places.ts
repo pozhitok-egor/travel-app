@@ -25,13 +25,13 @@ const getPlaces = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const upgradePlaces = async (req: Request, res: Response, next: NextFunction) => {
-  const { token } = req.body;
+  const { token, countryId, name, description, imageUrl, rating} = req.body;
   if ( token !== config.appToken ) {
     return res.status(401).json({
       message: "Unauthorized"
     });
   }
-  Places.findOneAndUpdate({_id: req.params.id}, req.body)
+  Places.findOneAndUpdate({_id: req.params.id}, {countryId: new mongoose.Types.ObjectId(countryId), name, description, imageUrl, rating})
   .exec()
   .then(() => {
     return res.status(202).json({
@@ -65,7 +65,7 @@ const addPlaces = async (req: Request, res: Response, next: NextFunction) => {
 
   const placesData = new Places({
     _id: new mongoose.Types.ObjectId(),
-    countryId,
+    countryId: new mongoose.Types.ObjectId(countryId),
     name,
     description,
     imageUrl,
