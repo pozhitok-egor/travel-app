@@ -1,4 +1,5 @@
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER } from "./types";
+
 import axios from "axios";
 
 export function loaderActivate() {
@@ -44,7 +45,7 @@ export function fetchCountries() {
   }
 }
 
-export function fetchCountry(id) {
+export function fetchCountry(id, lang) {
   return async dispatch => {
     dispatch(loaderActivate());
     axios.get(`https://rs-school-travel-app.herokuapp.com/country/${id}`,{
@@ -52,9 +53,8 @@ export function fetchCountry(id) {
       accept: 'application/json'
     }
     }).then((res) => {
-      console.log(res.data)
-
-      dispatch(fetchWeather(`${res.data.country.capital.en}, ${res.data.country.ISOCode}`));
+      dispatch(fetchWeather(`${res.data.country.capital.en}, ${res.data.country.ISOCode}`, lang));
+      dispatch(fetchCurrency(res.data.country.currency));
       dispatch({type: FETCH_COUNTRY, payload: res.data.country});
       dispatch({type: FETCH_PLACES, payload: res.data.places})
       dispatch(loaderDeactivate());
@@ -66,9 +66,9 @@ export function fetchCountry(id) {
   }
 }
 
-export function fetchWeather(city) {
+export function fetchWeather(city, lang) {
   return async dispatch => {
-    axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=049d6bfecf5f28f90a2cd75d513cb01f`,{
+    axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=049d6bfecf5f28f90a2cd75d513cb01f&lang=${lang}`,{
     headers: {
       accept: 'application/json'
     }
@@ -95,6 +95,20 @@ export function fetchUser(token) {
       dispatch({type: FETCH_USER, payload: null});
       localStorage.removeItem('token');
       dispatch(loaderDeactivate());
+    })
+  }
+}
+
+export function fetchCurrency(currency) {
+  return async dispatch => {
+    axios.get(`https://api.exchangeratesapi.io/latest?base=${currency}`,{
+    headers: {
+      accept: 'application/json'
+    }
+    }).then((res) => {
+      dispatch({type: FETCH_CURRENCY, payload: res.data});
+    }).catch((err) => {
+      dispatch({type: FETCH_CURRENCY, payload: err});
     })
   }
 }
