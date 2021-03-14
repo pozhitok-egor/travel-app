@@ -8,6 +8,9 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 import { PageLoader } from '../../PageLoader/PageLoader';
+import ListIcon from '@material-ui/icons/List';
+import { Link } from 'react-router-dom';
+
 
 const settingsInit = {
   dots: true,
@@ -38,14 +41,15 @@ const Gallery = ({places, lang}) => {
 
   useEffect(()=> {
     if(places === 1) setSettings(prev=>{return {...prev, slidesToShow:1,  nextArrow: <SampleNextArrow isFullScren={true}/>, prevArrow: <SamplePrevArrow isFullScren={true}/>}})
+    if(places.length) {
     places.forEach((el, index) => {
-      const src = el.imageUrl  
+      const src = el.imageUrl 
       const primaryImage = new Image() 
       primaryImage.onload = () => { 
         setPageLoader(false)
       }
       primaryImage.src = src 
-    })
+    }) }
   },[places])
   
   const handleClickImg = ()=> {
@@ -74,8 +78,12 @@ const Gallery = ({places, lang}) => {
               name="simple-controlled"
               value={el.rating}
               onChange={(event, newValue) => {
-          }}
-        />
+              }}
+            />
+            <Link to= {`/rating/${el._id}`}>
+              <ListIcon style={{ color: "#2e628f", marginLeft: "10px" }}></ListIcon>
+            </Link>       
+            
           </GalleryItem>
         })}
         </Slider>
