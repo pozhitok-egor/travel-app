@@ -63,8 +63,8 @@ const addRating = async (req: Request, res: Response, next: NextFunction) => {
 
   Rating.findOne({ placeId, userId: res.locals.jwt.id})
     .exec()
-    .then((user) => {
-      if (user) {
+    .then((rating) => {
+      if (rating) {
         next();
       } else {
         const ratingData = new Rating({
