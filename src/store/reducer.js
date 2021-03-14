@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, FETCH_PLACES, FETCH_WEATHER, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, FETCH_PLACES, FETCH_WEATHER, FETCH_CURRENCY, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY } from "./types";
 
 function countriesReducer(state = null, action) {
   switch (action.type) {
@@ -51,6 +51,14 @@ function weatherReducer(state = null, action) {
   }
 }
 
+function currencyReducer(state = null, action) {
+  switch (action.type) {
+    case FETCH_CURRENCY:
+      return action.payload;
+    default: return state;
+  }
+}
+
 function languageReducer(state = localStorage.getItem("lang") || "en", action) {
   switch (action.type) {
     case FETCH_LANGUAGE:
@@ -66,5 +74,6 @@ export const rootReducer = combineReducers({
   search: searchReducer,
   language: languageReducer,
   weather: weatherReducer,
+  currency: currencyReducer,
   places: placesReducer
 })
