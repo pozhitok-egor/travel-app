@@ -14,16 +14,19 @@ import DateTime from './DateTime';
 import Weather from './Weather';
 import Currency from './Currency';
 import Map from './Map';
+import User from '../User';
 
 class Country extends Component {
   componentDidMount() {
-    this.props.fetchCountry(this.props.match.params.id)
+    this.props.fetchCountry(this.props.match.params.id, this.props.lang)
   }
 
   render() {
     return (
       <Container>
-        <Header />
+        <Header>
+          <User/>
+        </Header>
             { this.props.pageLoader &&
               <PageLoader />
             }

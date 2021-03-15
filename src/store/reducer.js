@@ -1,5 +1,4 @@
-import { combineReducers } from "redux";
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, FETCH_PLACES, FETCH_WEATHER, FETCH_CURRENCY, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_RATING } from "./types";
+import { FETCH_RATING, FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER, AUTH_STATE } from "./types";
 
 function countriesReducer(state = null, action) {
   switch (action.type) {
@@ -67,6 +66,30 @@ function languageReducer(state = localStorage.getItem("lang") || "en", action) {
   }
 }
 
+function userReducer(state = null, action) {
+  switch (action.type) {
+    case FETCH_USER:
+      return action.payload;
+    case SET_USER:
+      return action.payload;
+    case SIGN_OUT:
+      return null;
+    default: return state;
+  }
+}
+
+function authReducer(state = { state: false, page: 'login'}, action) {
+  switch (action.type) {
+    case SET_LOGIN:
+      return {...state, page: 'login'};
+    case SET_REGISTRATION:
+      return {...state, page: 'registration'};
+    case AUTH_STATE:
+      return {...state, state: action.payload};
+      default: return state;
+  }
+}
+
 function ratingsReducer(state = null, action) {
   switch (action.type) {
     case FETCH_RATING:
@@ -82,7 +105,9 @@ export const rootReducer = combineReducers({
   search: searchReducer,
   language: languageReducer,
   weather: weatherReducer,
-  currency: currencyReducer,
+  ratings: ratingsReducer,
   places: placesReducer,
-  ratings: ratingsReducer
+  auth: authReducer,
+  user: userReducer,
+  currency: currencyReducer
 })
