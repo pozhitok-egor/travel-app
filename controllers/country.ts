@@ -27,7 +27,7 @@ const getCountries = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 const getCountry = async (req: Request, res: Response, next: NextFunction) => {
-  Places.find({countryId: req.params.id})
+  Places.find({countryId: mongoose.Types.ObjectId(req.params.id)})
   .exec()
   .then((places) => {
     Country.findOne({_id: req.params.id})
