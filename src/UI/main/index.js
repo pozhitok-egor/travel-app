@@ -19,9 +19,9 @@ class Main extends Component {
   render() {
     const countries = this.props.search ?
       this.props.countries ?
-      this.props.countries.filter((value) => value.capital.toLowerCase().includes(this.props.search.toLowerCase()) || value.name.toLowerCase().includes(this.props.search.toLowerCase()))
+      this.props.countries.filter((value) => value.capital[this.props.lang].toLowerCase().includes(this.props.search.toLowerCase()) || value.name[this.props.lang].toLowerCase().includes(this.props.search.toLowerCase()))
       : null
-    : this.props.countries;
+      : this.props.countries;
     return (
       <Container>
         <Header><Search /><User /></Header>
@@ -66,6 +66,12 @@ const Card = styled.div`
   background: ${(({image}) => `linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%), url(${image})`)};
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
   background-size: cover;
+  transform: perspective(500px);
+  transition: .3s ease-in-out;
+  &:hover {
+    transform: perspective(500px) rotateX(10deg) scale(1.1);
+    transition: .3s ease-in-out;
+  }
 `;
 
 const Info = styled.div`
