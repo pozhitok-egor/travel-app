@@ -86,20 +86,40 @@ const getUserRating = async (req: Request, res: Response, next: NextFunction) =>
 
 const upgradeRating = async (req: Request, res: Response, next: NextFunction) => {
   const { rating } = req.body
-  Rating.findOneAndUpdate({userId: res.locals.jwt.id, placeId: req.params.id}, { rating })
+  await Rating.findOneAndUpdate({userId: res.locals.jwt.id, placeId: req.params.id}, { rating })
   .exec()
-  .then(() => {
-    return res.status(202).json({
-      message: "Rating successfully updated"
-    });
-  })
   .catch((error) => {
     logger.error(NAMESPACE, error.message, error);
     return res.status(500).json({
       message: error.message,
       error
     });
+  });
+  let placeRating = null;
+  await Rating.aggregate([
+    {
+      "$match": {
+        "placeId": mongoose.Types.ObjectId(req.params.id)
+      }
+    },
+    {
+      "$group":
+        {
+          "_id": null,
+          "rating": { "$avg": "$rating" }
+        }
+    }
+  ])
+  .then((rating: any = {}) => {
+    placeRating = rating[0].rating;
+    places.findOneAndUpdate({_id: req.params.id}, {rating: rating[0].rating})
   })
+
+  return res.status(201).json({
+    message: "Rating successfully updated",
+    placeRating,
+    userRating: rating,
+  });
 };
 
 const addRating = async (req: Request, res: Response, next: NextFunction) => {
@@ -123,54 +143,58 @@ const addRating = async (req: Request, res: Response, next: NextFunction) => {
     });
   })
 
+  let userRating = null;
+  let placeRating = null;
   Rating.findOne({ placeId: req.params.id, userId: res.locals.jwt.id})
-    .exec()
-    .then((ratings) => {
-      if (ratings) {
-        next();
-      } else {
-        const ratingData = new Rating({
-          _id: new mongoose.Types.ObjectId(),
-          userId: mongoose.Types.ObjectId(res.locals.jwt.id),
-          placeId: mongoose.Types.ObjectId(req.params.id),
-          rating
-        });
+  .exec()
+  .then((ratings) => {
+    if (ratings) {
+      next();
+    } else {
+      const ratingData = new Rating({
+        _id: new mongoose.Types.ObjectId(),
+        userId: mongoose.Types.ObjectId(res.locals.jwt.id),
+        placeId: mongoose.Types.ObjectId(req.params.id),
+        rating
+      });
 
-        ratingData
-        .save()
-        .then((rating) => {
-          Rating.aggregate([
-            {
-              "$match": {
-                "placeId": mongoose.Types.ObjectId(req.params.id)
-              }
-            },
-            {
-              "$group":
-                {
-                  "_id": null,
-                  "rating": { "$avg": "$rating" }
-                }
+      ratingData
+      .save()
+      .then((rating) => {
+        userRating = rating.rating;
+        Rating.aggregate([
+          {
+            "$match": {
+              "placeId": mongoose.Types.ObjectId(req.params.id)
             }
-          ])
-          .then((rating: any = {}) => {
-            places.findOneAndUpdate({_id: req.params.id}, {rating: rating[0].rating})
-          })
-
+          },
+          {
+            "$group":
+              {
+                "_id": null,
+                "rating": { "$avg": "$rating" }
+              }
+          }
+        ])
+        .then((rating: any = {}) => {
+          placeRating = rating[0].rating;
+          places.findOneAndUpdate({_id: req.params.id}, {rating: rating[0].rating})
           return res.status(201).json({
             message: "Rating successfully added",
-            rating,
+            placeRating,
+            userRating: userRating,
           });
         })
-        .catch((error) => {
-          logger.error(NAMESPACE, error.message, error);
-          return res.status(500).json({
-            message: error.message,
-            error,
-          });
+      })
+      .catch((error) => {
+        logger.error(NAMESPACE, error.message, error);
+        return res.status(500).json({
+          message: error.message,
+          error,
         });
-      }
-    })
+      });
+    }
+  })
 };
 
 export default {
