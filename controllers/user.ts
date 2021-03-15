@@ -44,6 +44,9 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
   if (username.search(/[a-z]/i) < 0) {
     error = "Your username must contain at least one letter.";
   }
+  if ( username.length > 24 ) {
+    error = "Max length of username is 24 characters";
+  }
 
   if (password.length < 8) {
     error = "Your password must be at least 8 characters";
@@ -203,6 +206,9 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
 
     if ( username.length < 4 ) {
       error = "Your username must be at least 4 characters";
+    }
+    if ( username.length > 24 ) {
+      error = "Max length of username is 24 characters";
     }
     if ( username.search(/[a-z]/i) < 0 ) {
       error = "Your username must contain at least one letter.";
