@@ -1,6 +1,7 @@
 import { Route, Switch } from "react-router";
 import Main from "./UI/main";
 import Country from "./UI/country";
+import Rating from "./UI/rating";
 import styled from 'styled-components';
 import styles from './styles.css';
 
@@ -10,6 +11,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={Main} />
         <Route path="/country/:id" component={Country} />
+        <Route path="/rating/:country/:id" component={Rating} />
       </Switch>
     </AppBlock>
   );

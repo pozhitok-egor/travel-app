@@ -1,4 +1,4 @@
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, FETCH_RATING } from "./types";
 import axios from "axios";
 
 export function loaderActivate() {
@@ -88,7 +88,7 @@ export function fetchCurrency(currency) {
       accept: 'application/json'
     }
     }).then((res) => {
-      dispatch({type: FETCH_CURRENCY, payload: res.data});
+      dispatch({type: FETCH_CURRENCY, payload: res.data.ratings});
     }).catch((err) => {
       dispatch({type: FETCH_CURRENCY, payload: err});
     })
@@ -108,3 +108,21 @@ export function fetchCurrency(currency) {
 //     })
 //   }
 // }
+
+export function fetchRating(id) {
+  return async dispatch => {
+    dispatch(loaderActivate());
+    axios.get(`https://rs-school-travel-app.herokuapp.com/rating/${id}`,{
+    headers: {
+      accept: 'application/json'
+    }
+    }).then((res) => {
+      console.log(res.data)
+      dispatch({type: FETCH_RATING, payload: res.data.ratings});
+      dispatch(loaderDeactivate());
+    }).catch((err) => {
+      dispatch({type: FETCH_RATING, payload: null});
+      dispatch(loaderDeactivate());
+    })
+  }
+}
