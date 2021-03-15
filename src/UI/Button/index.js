@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const Button = styled.button`
+  cursor: pointer;
   font-family: Balsamiq Sans;
   font-size: 24px;
   padding: 10px 20px;

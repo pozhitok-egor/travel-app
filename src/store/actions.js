@@ -157,7 +157,7 @@ export function fetchRating(id) {
     }
     }).then((res) => {
       console.log(res.data)
-      dispatch({type: FETCH_RATING, payload: res.data.ratings});
+      dispatch({type: FETCH_RATING, payload: res.data.ratings.sort((a, b) => b.rating - a.rating)});
       dispatch(loaderDeactivate());
     }).catch((err) => {
       dispatch({type: FETCH_RATING, payload: null});

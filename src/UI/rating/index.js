@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import starW from '../../assets/icons/star_fill.svg'
 import starD from '../../assets/icons/star_white.svg'
 import { Link } from 'react-router-dom';
+import User from '../User';
 
 const RowComp = ({ rating }) => {
   const stars = [1, 2, 3, 4, 5]
@@ -65,7 +66,7 @@ class Rating extends Component {
   render() {
     return (
       <Container>
-        <Header></Header>
+        <Header><User /></Header>
         <Content>
           {this.props.pageLoader &&
             <PageLoader />
