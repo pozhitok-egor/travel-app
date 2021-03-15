@@ -5,14 +5,19 @@ import Auth from './UI/authorization';
 import styled from 'styled-components';
 import styles from './styles.css';
 import { connect } from 'react-redux';
+import { fetchUser } from './store/actions';
 
 const App = ( props ) => {
+  const token = localStorage.getItem('token');
+  if ( token && !props.auth.state && !props.user) {
+    props.fetchUser(token);
+  }
   return (
     <AppBlock style={styles}>
       <Switch>
         { !props.user && <Redirect exact path='/' to='/auth' /> }
-        { props.user && <Route exact path='/' component={Main} /> }
-        { props.user && <Route path='/country/:id' component={Country} />}
+        { props.user && !props.auth.state && <Route exact path='/' component={Main} /> }
+        { props.user && !props.auth.state && <Route path='/country/:id' component={Country} />}
         <Route path='/auth' component={Auth} />
       </Switch>
     </AppBlock>
@@ -21,11 +26,16 @@ const App = ( props ) => {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    auth: state.auth
   }
 }
 
-export default connect(mapStateToProps, null)(App);
+const mapDispatchToProps = {
+  fetchUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 const AppBlock = styled.div`
   font-family: 'Montserrat', sans-serif;

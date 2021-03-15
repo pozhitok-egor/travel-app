@@ -1,4 +1,4 @@
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER, AUTH_STATE } from "./types";
 
 import axios from "axios";
 
@@ -82,6 +82,7 @@ export function fetchWeather(city, lang) {
 
 export function fetchUser(token) {
   return async dispatch => {
+    dispatch(authState(true));
     dispatch(loaderActivate());
     axios.get(`https://rs-school-travel-app.herokuapp.com/user/`,{
     headers: {
@@ -91,11 +92,20 @@ export function fetchUser(token) {
     }).then((res) => {
       dispatch({type: FETCH_USER, payload: res.data.user});
       dispatch(loaderDeactivate());
+      dispatch(authState(false));
     }).catch((err) => {
       dispatch({type: FETCH_USER, payload: null});
       localStorage.removeItem('token');
       dispatch(loaderDeactivate());
+      dispatch(authState(false));
     })
+  }
+}
+
+export function authState(state) {
+  return {
+    type: AUTH_STATE,
+    payload: state,
   }
 }
 

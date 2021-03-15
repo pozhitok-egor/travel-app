@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER, AUTH_STATE } from "./types";
 
 
 function countriesReducer(state = null, action) {
@@ -80,12 +80,14 @@ function userReducer(state = null, action) {
   }
 }
 
-function authReducer(state = 'login', action) {
+function authReducer(state = { state: false, page: 'login'}, action) {
   switch (action.type) {
     case SET_LOGIN:
-      return 'login';
+      return {...state, page: 'login'};
     case SET_REGISTRATION:
-      return 'registration';
+      return {...state, page: 'registration'};
+    case AUTH_STATE:
+      return {...state, state: action.payload};
     default: return state;
   }
 }
