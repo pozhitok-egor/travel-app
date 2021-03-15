@@ -12,7 +12,7 @@ const Currency = (props) => {
     }
 
     const rates = (currency === 'RUB') ? (props.currency.rates[currency] / 100) : props.currency.rates[currency];
-    return (rates < 0.01) ? `<${rates.toFixed(2)}` : rates.toFixed(2);
+    return (1 / rates).toFixed(2);
   }
   
   return (
