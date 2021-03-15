@@ -66,10 +66,11 @@ const Card = styled.div`
   background: ${(({image}) => `linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 60%), url(${image})`)};
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
   background-size: cover;
-  transition: .5s ease-in-out;
+  transform: perspective(500px);
+  transition: .3s ease-in-out;
   &:hover {
-    transform: perspective(400px) rotateX(20deg) scale(1.2);
-    transition: .5s ease-in-out;
+    transform: perspective(500px) rotateX(10deg) scale(1.1);
+    transition: .3s ease-in-out;
   }
 `;
 
