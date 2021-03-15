@@ -1,4 +1,4 @@
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER, AUTH_STATE } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER, AUTH_STATE, UPDATE_RATING_PLACES } from "./types";
 
 import axios from "axios";
 
@@ -146,5 +146,23 @@ export function setLogin() {
 export function setRegistration() {
   return {
     type: SET_REGISTRATION,
+  }
+}
+
+export function fetchRating(params) {
+  return 
+}
+export function updateRating(id,rating) {
+  return async dispatch => {
+    axios.post(`https://rs-school-travel-app.herokuapp.com/rating/${id}`,{
+      rating: rating
+    },{
+    headers: {
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
+    }}     
+    ).then((res) => {
+      dispatch({type: UPDATE_RATING_PLACES, payload: {id: id, rating: res.data.placeRating}});
+    }).catch((err) => {
+    })
   }
 }

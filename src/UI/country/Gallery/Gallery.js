@@ -3,11 +3,15 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
-import { Rating } from '@material-ui/lab';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 import { PageLoader } from '../../PageLoader/PageLoader';
+import { Link } from 'react-router-dom';
+import { updateRating } from '../../../store/actions';
+import starW from '../../../assets/icons/star_fill.svg'
+import starD from '../../../assets/icons/star_white.svg'
+import list from '../../../assets/icons/list.svg'
 
 const settingsInit = {
   dots: true,
@@ -31,21 +35,22 @@ const settingsInit = {
     }]
 };
 
-const Gallery = ({places, lang}) => { 
+const Gallery = ({places, lang,...props}) => { 
   const [settings,setSettings] = useState(settingsInit);
   const handle = useFullScreenHandle();
   const [pageLoader, setPageLoader] = useState(true);
 
   useEffect(()=> {
     if(places === 1) setSettings(prev=>{return {...prev, slidesToShow:1,  nextArrow: <SampleNextArrow isFullScren={true}/>, prevArrow: <SamplePrevArrow isFullScren={true}/>}})
+    if(places.length) {
     places.forEach((el, index) => {
-      const src = el.imageUrl  
+      const src = el.imageUrl 
       const primaryImage = new Image() 
       primaryImage.onload = () => { 
         setPageLoader(false)
       }
       primaryImage.src = src 
-    })
+    }) }
   },[places])
   
   const handleClickImg = ()=> {
@@ -59,6 +64,10 @@ const Gallery = ({places, lang}) => {
       else setSettings(prev=>{return {...prev, slidesToShow:2,  nextArrow: <SampleNextArrow isFullScren={false}/>, prevArrow: <SamplePrevArrow isFullScren={false}/> }})
     }
   }  
+
+  const handleChangeRating = (id,rating) => {    
+    props.updateRating(id,rating)
+  }
   return (
     <GalleryBlock>
       { pageLoader && places.length ? 
@@ -70,12 +79,14 @@ const Gallery = ({places, lang}) => {
             <GalleryItemImg src={el.imageUrl} alt={el.name[lang]} onClick={handleClickImg} isFullScren={handle.active}></GalleryItemImg>
             <Name>{el.name[lang]}</Name>
             {handle.active ?<Description isFullScren={handle.active}>{el.description[lang]}</Description>: null}
-            <Rating
-              name="simple-controlled"
-              value={el.rating}
-              onChange={(event, newValue) => {
-          }}
-        />
+            <RatingBlock> 
+            <Rating value={el.rating} handleChange={handleChangeRating} id={el._id} />
+            <RatingTotal>{el.rating}</RatingTotal>
+            <Link to= {`/rating/${el.countryId}/${el._id}`}>
+              <ListImg src={list} alt="rating"></ListImg>
+            </Link>    
+            </RatingBlock>
+            
           </GalleryItem>
         })}
         </Slider>
@@ -86,6 +97,21 @@ const Gallery = ({places, lang}) => {
   )
 }
 
+const Rating = ({id, handleChange, value})=> {
+  const mass= [1,2,3,4,5];
+  const [valueHover, setValueHover]= useState(value);
+  const [checked, setChecked]= useState(false)
+  return (
+    <RatingBlock onMouseOut={()=>{return !checked ? setValueHover(0): null}} >
+      {mass.map((el,i)=>{
+        return <RatingImg key={i} src={valueHover>=el ? starW: starD} alt='star' 
+        onMouseOver={()=>{return !checked ? setValueHover(el): null}}
+        onClick={()=>{handleChange(id,el); setChecked(true); setValueHover(el)}}>
+        </RatingImg>
+      }) }
+    </RatingBlock>
+  )
+}
 const GalleryBlock =styled.div`
 margin: 15px 0 30px;
 `;
@@ -145,6 +171,24 @@ left: ${({isFullScren})=> isFullScren? "15px": "-25px"};
   font-size: 30px;
 }
 `
+const RatingBlock =styled.div`
+display: flex;
+justify-content: center;
+`
+const RatingTotal =styled.div`
+margin: 0 10px;
+font-family: "Balsamiq Sans", sans-serif;
+align-self: center;
+`
+const RatingImg =styled.img`
+width: 25px;
+cursor: pointer
+`
+const ListImg =styled.img`
+width: 25px;
+cursor: pointer
+
+`
 function SampleNextArrow (props) {
   const { className, onClick, isFullScren } = props;
   return (
@@ -166,7 +210,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  
+  updateRating
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Gallery);
