@@ -12,6 +12,7 @@ const ICONS = {
   cloud: ['03d', '03n', '04d', '04n'],
   sun: ['01d'],
   moon: ['01n'],
+  fog: ['50d', '50n'],
   cloudSun: ['02d', '03d'],
   cloudMoon: ['02n', '03n'],
 };
