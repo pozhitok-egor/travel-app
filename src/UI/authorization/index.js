@@ -13,12 +13,9 @@ import { Redirect } from 'react-router';
 
 const Auth = (props) => {
   const data = queryString.parse(props.location.search.substring(1));
-  if (data.token) {
+  if (data.token && !props.auth.state && !props.user) {
     localStorage.setItem('token', data.token);
-  }
-  const token = data.token || localStorage.getItem('token');
-  if ( token && !props.pageLoader && !props.user) {
-    props.fetchUser(token);
+    props.fetchUser(data.token);
   }
   return (
     <Container>
@@ -31,7 +28,7 @@ const Auth = (props) => {
             <PageLoader />
           }
           { !props.pageLoader &&
-            props.auth === 'login' ?
+            props.auth.page === 'login' ?
             <Login error={data.error}/> : !props.pageLoader && <Registration error={data.error}/>
           }
         </Content>

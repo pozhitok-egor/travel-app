@@ -9,6 +9,7 @@ export const FETCH_WEATHER = 'WEATHER/FETCH_WEATHER';
 export const SIGN_OUT = 'USER/SIGN_OUT';
 export const FETCH_USER = 'USER/FETCH_USER';
 export const SET_USER = 'USER/SET_USER';
+export const AUTH_STATE = 'USER/AUTH_STATE';
 export const SET_LOGIN = 'AUTH/SET_LOGIN';
 export const SET_REGISTRATION = 'AUTH/SET_REGISTRATION';
 export const FETCH_CURRENCY = 'CURRENCY/FETCH_CURRENCY';
