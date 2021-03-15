@@ -8,7 +8,7 @@ const User = (props) => {
   return (
     <UserBlock>
       <Buttons>
-        <Button onClick={() => props.signOut()}>Sign Out</Button>
+        <Link to='/'><Button onClick={() => props.signOut()}>Sign Out</Button></Link>
         <Link to='/account'>
           <Button>Account</Button>
         </Link>
