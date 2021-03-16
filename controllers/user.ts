@@ -201,6 +201,8 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
 const update = async (req: Request, res: Response, next: NextFunction) => {
   const { username, accountUrl, password } = req.body;
 
+  const data = { username, accountUrl, password };
+
   if ( username ) {
     let error = '';
 
@@ -220,6 +222,8 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
         error: error,
       });
     }
+  } else {
+    delete data.username;
   }
 
   if ( password ) {
@@ -240,11 +244,18 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
         error: error,
       });
     }
+
+    data.password = await bcryptjs.hash(password,10);
+
+  } else {
+    delete data.password;
   }
 
-  const hashedPassword = password && await bcryptjs.hash(password,10);
+  if ( !accountUrl ) {
+    delete data.accountUrl;
+  }
 
-  User.findOneAndUpdate({ _id: res.locals.jwt.id }, { username, accountUrl, password: hashedPassword })
+  User.findOneAndUpdate({ _id: res.locals.jwt.id }, data)
   .exec()
   .then((user) => {
     return res.status(200).json({
