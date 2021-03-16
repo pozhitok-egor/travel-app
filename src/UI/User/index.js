@@ -37,7 +37,6 @@ const UserBlock = styled.div`
 `;
 
 const Avatar = styled.img`
-  cursor: none;
   width: 70px;
   height: 70px;
   border-radius: 50px;
