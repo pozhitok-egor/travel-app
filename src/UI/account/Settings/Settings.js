@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { setUser,updateUserImg } from '../../../store/actions';
 import Input from '../../Input';
-import { AvatarS, Error, Form, Success, InputFile,Label,Group } from '../Styled';
+import { Avatar, Error, Form, Success, InputFile,Label,Group } from '../Styled';
 import Button from '../../Button';
 import axios from 'axios';
 
@@ -78,11 +78,8 @@ const Settings = (props) => {
   return (
     <Form onSubmit={updateUserP}>
     <Label>
-    <div>
-        <img src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`} alt="Preview" />
-    </div>
         <InputFile type="file" onChange={(e)=>uploadImage(e)} />
-        <AvatarS src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`} alt=""/>
+        <Avatar src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`} alt=""/>
     </Label>
     <h1>Change username</h1>
     <Group>

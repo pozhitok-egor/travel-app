@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import Container from '../Container';
 import Footer from '../Footer';
+import User from '../User'
 import Header from '../Header';
 import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
@@ -18,7 +19,7 @@ const Account = (props) => {
   }
   return (
     <Container>
-      <Header></Header>
+      <Header><User /></Header>
         <Content>
           { !props.user &&
             <Redirect to='/auth'/>
