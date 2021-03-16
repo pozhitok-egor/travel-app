@@ -222,6 +222,22 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
         error: error,
       });
     }
+    try { await User.findOne({ username: username }).exec()
+      .then((_user) => {
+        if (_user) {
+          throw {message: "User already exists", error: "User exception"};
+        }
+      })
+      .catch((error) => {
+        throw error;
+      });
+    }
+    catch(error) {
+      return res.status(500).json({
+        message: error.message,
+        error
+      });
+    }
   } else {
     delete data.username;
   }
@@ -255,20 +271,19 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
     delete data.accountUrl;
   }
 
-  User.findOneAndUpdate({ _id: res.locals.jwt.id }, data)
+  User.findOneAndUpdate({ _id: res.locals.jwt.id }, data, { new: true })
   .exec()
   .then((user) => {
     return res.status(200).json({
       message: "Updated",
       user
     });
-  })
-  .catch((error) => {
+  }).catch((error) => {
     return res.status(500).json({
       message: error.message,
       error
     });
-  })
+  });
 }
 
 const addPhoto = async (req: Request, res: Response, next: NextFunction) => {
