@@ -1,5 +1,4 @@
-import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER, AUTH_STATE, UPDATE_RATING_PLACES } from "./types";
-
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER, AUTH_STATE, UPDATE_RATING_PLACES, FETCH_RATING } from "./types";
 import axios from "axios";
 
 export function loaderActivate() {
@@ -149,9 +148,23 @@ export function setRegistration() {
   }
 }
 
-export function fetchRating(params) {
-  return 
+export function fetchRating(id) {
+  return async dispatch => {
+    dispatch(loaderActivate());
+    axios.get(`https://rs-school-travel-app.herokuapp.com/rating/${id}`,{
+    headers: {
+      accept: 'application/json'
+    }
+    }).then((res) => {
+      dispatch({type: FETCH_RATING, payload: res.data.ratings.sort((a, b) => b.rating - a.rating)});
+      dispatch(loaderDeactivate());
+    }).catch((err) => {
+      dispatch({type: FETCH_RATING, payload: null});
+      dispatch(loaderDeactivate());
+    })
+  }
 }
+
 export function updateRating(id,rating) {
   return async dispatch => {
     axios.post(`https://rs-school-travel-app.herokuapp.com/rating/${id}`,{
