@@ -85,18 +85,21 @@ const getUserRating = async (req: Request, res: Response, next: NextFunction) =>
 }
 
 const upgradeRating = async (req: Request, res: Response, next: NextFunction) => {
-  const { rating } = req.body
-  await Rating.findOneAndUpdate({userId: res.locals.jwt.id, placeId: req.params.id}, { rating })
-  .exec()
-  .catch((error) => {
-    logger.error(NAMESPACE, error.message, error);
+  const { rating } = req.body;
+  try {
+    await Rating.findOneAndUpdate({userId: res.locals.jwt.id, placeId: req.params.id}, { rating })
+    .exec()
+    .catch((error) => {
+      logger.error(NAMESPACE, error.message, error);
+      throw error;
+    });
+  } catch(error) {
     return res.status(500).json({
       message: error.message,
-      error
+      error,
     });
-  });
-  let placeRating = null;
-  await Rating.aggregate([
+  }
+  Rating.aggregate([
     {
       "$match": {
         "placeId": mongoose.Types.ObjectId(req.params.id)
@@ -110,30 +113,21 @@ const upgradeRating = async (req: Request, res: Response, next: NextFunction) =>
         }
     }
   ])
-  .then((rating: any = {}) => {
-    placeRating = rating[0].rating;
-    places.findOneAndUpdate({_id: req.params.id}, {rating: rating[0].rating})
-  })
-
-  return res.status(201).json({
-    message: "Rating successfully updated",
-    placeRating,
-    userRating: rating,
-  });
-};
-
-const addRating = async (req: Request, res: Response, next: NextFunction) => {
-  const { rating } = req.body;
-
-  await places.findOne({_id: req.params.id})
-  .exec()
+  .then((_rating: any = {}) => {
+    places.findOneAndUpdate({_id: req.params.id}, {rating: _rating[0].rating}, {new: true})
   .then((place) => {
-    if (!place) {
-      return res.status(404).json({
-        message: "Place not found",
-        error: "Place not found"
-      });
-    }
+    return res.status(201).json({
+      message: "Rating successfully updated",
+      placeRating: place.rating,
+      userRating: rating,
+    });
+  }).catch((error) => {
+    logger.error(NAMESPACE, error.message, error);
+    return res.status(500).json({
+      message: error.message,
+      error,
+    });
+  });
   })
   .catch((error) => {
     logger.error(NAMESPACE, error.message, error);
@@ -141,10 +135,34 @@ const addRating = async (req: Request, res: Response, next: NextFunction) => {
       message: error.message,
       error,
     });
-  })
+  });
 
-  let userRating = null;
-  let placeRating = null;
+
+
+};
+
+const addRating = async (req: Request, res: Response, next: NextFunction) => {
+  const { rating } = req.body;
+
+  try {
+    await places.findOne({_id: req.params.id})
+    .exec()
+    .then((place) => {
+      if (!place) {
+        throw {message: "Place not found", data:""};
+      }
+    })
+    .catch((error) => {
+      logger.error(NAMESPACE, error.message, error);
+      throw error;
+    })
+  } catch(error) {
+    return res.status(500).json({
+      message: error.message,
+      error,
+    });
+  }
+
   Rating.findOne({ placeId: req.params.id, userId: res.locals.jwt.id})
   .exec()
   .then((ratings) => {
@@ -161,7 +179,6 @@ const addRating = async (req: Request, res: Response, next: NextFunction) => {
       ratingData
       .save()
       .then((rating) => {
-        userRating = rating.rating;
         Rating.aggregate([
           {
             "$match": {
@@ -176,14 +193,21 @@ const addRating = async (req: Request, res: Response, next: NextFunction) => {
               }
           }
         ])
-        .then((rating: any = {}) => {
-          placeRating = rating[0].rating;
-          places.findOneAndUpdate({_id: req.params.id}, {rating: rating[0].rating})
-          return res.status(201).json({
-            message: "Rating successfully added",
-            placeRating,
-            userRating: userRating,
-          });
+        .then((_rating: any = {}) => {
+          places.findOneAndUpdate({_id: req.params.id}, {rating: _rating[0].rating}, {new: true})
+          .then((place) => {
+            return res.status(201).json({
+              message: "Rating successfully added",
+              placeRating: place.rating,
+              userRating: rating.rating,
+            });
+          }).catch((error) => {
+            logger.error(NAMESPACE, error.message, error);
+            return res.status(500).json({
+              message: error.message,
+              error,
+            });
+          })
         })
       })
       .catch((error) => {
