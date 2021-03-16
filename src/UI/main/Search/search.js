@@ -28,7 +28,7 @@ const SearchBlock = styled.form`
 
 const Icon = styled.img`
   margin-left: 10px;
-  cursor: none;
+  cursor: pointer;
 `;
 
 const Input = styled.input`

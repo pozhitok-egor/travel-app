@@ -115,7 +115,7 @@ export function fetchCurrency(currency) {
       accept: 'application/json'
     }
     }).then((res) => {
-      dispatch({type: FETCH_CURRENCY, payload: res.data.ratings});
+      dispatch({type: FETCH_CURRENCY, payload: res.data});
     }).catch((err) => {
       dispatch({type: FETCH_CURRENCY, payload: err});
     })
@@ -156,7 +156,6 @@ export function fetchRating(id) {
       accept: 'application/json'
     }
     }).then((res) => {
-      console.log(res.data)
       dispatch({type: FETCH_RATING, payload: res.data.ratings.sort((a, b) => b.rating - a.rating)});
       dispatch(loaderDeactivate());
     }).catch((err) => {

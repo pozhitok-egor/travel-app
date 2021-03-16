@@ -14,17 +14,17 @@ const Currency = (props) => {
     const rates = (currency === 'RUB') ? (props.currency.rates[currency] / 100) : props.currency.rates[currency];
     return (1 / rates).toFixed(2);
   }
-  
+
   return (
     <CurrencyBlock>
       { !props.currency &&
         <PageLoader />
       }
-      { props.currency && props.currency.isAxiosError &&
-        <div>No currency state</div>
-      }
       { props.currency && !props.currency.isAxiosError &&
         <CurrencyWrap>
+          <CurrencyName>
+            { props.currency.base }
+          </CurrencyName>
           <CurrencyItem>
             <div>1 USD</div>
             <div>{prepCurrency('USD')}</div>
@@ -37,6 +37,13 @@ const Currency = (props) => {
             <div>100 RUB</div>
             <div>{prepCurrency('RUB')}</div>
           </CurrencyItem>
+        </CurrencyWrap>
+      }
+      { props.currency && props.currency.isAxiosError && 
+        <CurrencyWrap>
+          <CurrencyName>
+            No currency exchange rate for {props.country.currency}
+          </CurrencyName>
         </CurrencyWrap>
       }
     </CurrencyBlock>
@@ -71,13 +78,23 @@ const CurrencyWrap = styled.div`
   border-radius: 25px;
 `;
 
+const CurrencyName = styled.div`
+  text-align: center;
+  font-family: Balsamiq Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 19px;
+  line-height: 23px;
+  color: #EFF2F3;
+`
+
+
 const CurrencyItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 10px;
-
   font-family: Balsamiq Sans;
   font-style: normal;
   font-weight: bold;

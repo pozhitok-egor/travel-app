@@ -27,7 +27,7 @@ export default connect(mapStateToProps, null)(Video);
 
 const VideoWrapper = styled.div`
   width: 100%;
-  height: 400px;
+  aspect-ratio: 16 / 9;
   top: 0;
   left: 0;
   overflow: hidden;
