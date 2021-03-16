@@ -166,3 +166,20 @@ export function updateRating(id,rating) {
     })
   }
 }
+
+ export function updateUserImg(img) {
+   console.log(img)
+   return async dispatch =>{
+    axios.put(`https://rs-school-travel-app.herokuapp.com/user/upload`,{
+      img
+    },{
+    headers: {
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
+    }}     
+    ).then((res) => {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    })
+   } 
+ }

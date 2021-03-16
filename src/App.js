@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import styles from './styles.css';
 import { connect } from 'react-redux';
 import { fetchUser } from './store/actions';
+import Account from './UI/account';
 
 const App = ( props ) => {
   const token = localStorage.getItem('token');
@@ -19,6 +20,7 @@ const App = ( props ) => {
         { props.user && !props.auth.state && <Route exact path='/' component={Main} /> }
         { props.user && !props.auth.state && <Route path='/country/:id' component={Country} />}
         <Route path='/auth' component={Auth} />
+        <Route path='/account' component={Account} />
       </Switch>
     </AppBlock>
   )
