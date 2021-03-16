@@ -81,10 +81,10 @@ const Gallery = ({places, lang,...props}) => {
             {handle.active ?<Description isFullScren={handle.active}>{el.description[lang]}</Description>: null}
             <RatingBlock> 
             <Rating value={el.rating} handleChange={handleChangeRating} id={el._id} />
-            <RatingTotal>{el.rating}</RatingTotal>
+            <RatingTotal isFullScren={handle.active}>{Number(el.rating).toFixed(2)}</RatingTotal>
             <Link to= {`/rating/${el.countryId}/${el._id}`}>
               <ListImg src={list} alt="rating"></ListImg>
-            </Link>    
+            </Link>
             </RatingBlock>
             
           </GalleryItem>
@@ -130,6 +130,8 @@ const Name =styled.div`
 
 `;
 const Description =styled.div`
+width: 70%;
+margin: 0 auto 20px;
 color: ${({isFullScren})=> isFullScren? 'white': 'black'}
 `;
 const ExitButton = styled.div `
@@ -176,9 +178,11 @@ display: flex;
 justify-content: center;
 `
 const RatingTotal =styled.div`
-margin: 0 10px;
+width: 50px;
 font-family: "Balsamiq Sans", sans-serif;
+color: ${({isFullScren})=> isFullScren? "#fff": "#000"};
 align-self: center;
+line-height: 20px;
 `
 const RatingImg =styled.img`
 width: 25px;

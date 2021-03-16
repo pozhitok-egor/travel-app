@@ -17,7 +17,6 @@ const MainBlock = styled.div`
   padding: 10px 20px 80px 20px;
   flex-wrap: wrap;
   justify-content: space-around;
-
   @media (max-width: 500px) {
     padding-bottom: 250px;
   }

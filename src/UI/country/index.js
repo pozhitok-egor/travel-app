@@ -67,15 +67,27 @@ const MainBlock = styled.div`
   text-align: center;
   padding: 10px;
   width: calc(70% - 20px);
+  @media (max-width: 700px) {
+    width: calc(100% - 20px);
+  }
 `;
 
 const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   text-align: center;
   padding: 10px;
   width: calc(30% - 20px);
+  @media (max-width: 700px) {
+    width: calc(100% - 20px);
+    padding: 20px 30%;
+  }
+  @media (max-width: 500px) {
+    padding: 20px 10%;
+  }
+  @media (max-width: 400px) {
+    padding: 20px 0;
+  }
 `;
 
 const mapStateToProps = (state) => {
