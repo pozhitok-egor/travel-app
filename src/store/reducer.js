@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { FETCH_RATING, FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER, AUTH_STATE } from "./types";
+import { FETCH_COUNTRIES, FETCH_COUNTRY, FETCH_LANGUAGE, LOADER_ACTIVATE, LOADER_DEACTIVATE, SEARCH_COUNTRY, FETCH_WEATHER, FETCH_CURRENCY, FETCH_PLACES, SIGN_OUT, SET_LOGIN, SET_REGISTRATION, FETCH_USER, SET_USER, AUTH_STATE, UPDATE_RATING_PLACES, FETCH_RATING } from "./types";
 
 function countriesReducer(state = null, action) {
   switch (action.type) {
@@ -31,6 +31,8 @@ function placesReducer(state = null, action) {
   switch (action.type) {
     case FETCH_PLACES:
       return action.payload;
+    case UPDATE_RATING_PLACES: 
+      return state.map(el=> el._id === action.payload.id ? {...el, rating : action.payload.rating} : el)
     default: return state;
   }
 }
@@ -98,6 +100,7 @@ function ratingsReducer(state = null, action) {
     default: return state;
   }
 }
+
 
 export const rootReducer = combineReducers({
   pageLoader: loaderReducer,
