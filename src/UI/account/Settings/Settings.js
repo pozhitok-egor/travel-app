@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { setUser, updateUserImg } from '../../../store/actions';
 import Input from '../../Input';
-import { AvatarS, Error, Form, Success, InputFile, Label, Group } from '../Styled';
+import { Avatar, Error, Form, Success, InputFile,Label,Group } from '../Styled';
 import Button from '../../Button';
 import axios from 'axios';
 import { withNamespaces } from 'react-i18next';
@@ -65,30 +65,41 @@ const Settings = (props, { t }) => {
 
 
   const uploadImage = (e) => {
-    console.log(e)
-    props.updateUserImg(e.target.files[0])
-    // const f= new FileReader();
-    // f.onload = ()=> {
-    //   console.log(f.result)
-    //   props.updateUserImg(f.result)
-    // }
-    // f.readAsDataURL(e.target.files[0])
+    // props.updateUserImg(e.target.files[0])
+
+    const files = e.target.files
+    console.log(files[0])
+    const formData = new FormData()
+    formData.append('file', files[0]);
+    console.log(formData.getAll('file'))
+    fetch('https://rs-school-travel-app.herokuapp.com/upload', {
+      method: 'PUT',
+      body: formData,
+      header: {
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+    })
+    .catch(error => {
+      console.error(error)
+    })
   }
 
   return (
     <Form onSubmit={updateUserP}>
-      <Label>
-        <div>
-          <img src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`} alt="Preview" />
-        </div>
-        <InputFile type="file" onChange={(e) => uploadImage(e)} />
-        <AvatarS src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`} alt="" />
-      </Label>
-      <h1>{props.t('сhange_username')}</h1>
-      <Group>
-        <Input type='text' value={username} onChange={e => setUsername(e.target.value)} name='username' placeholder={props.t('username')} autocomplete='username' />
-        <Button onClick={updateUserN}>OK</Button>
-      </Group>
+    <Label>
+        <InputFile type="file" onChange={(e)=>uploadImage(e)} />
+        <Avatar src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`} alt=""/>
+    </Label>
+    <h1>{props.t('сhange_username')}</h1>
+    <Group>
+      <Input type='text' value={username} onChange={e=>setUsername(e.target.value)} name='username' placeholder={props.t('username')} autocomplete='username'/>
+      <Button onClick={updateUserN}>{props.t('ok')}</Button>
+    </Group>
+
       { errorN &&
         <Error>{errorN}</Error>
       }

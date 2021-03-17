@@ -20,7 +20,7 @@ export const Success = styled.h2`
   color: #6FCF97;
   width: 290px;
 `;
-export const AvatarS = styled.img`
+export const Avatar = styled.img`
   heigt:200px;
   width: 200px;
   margin: 0 auto;

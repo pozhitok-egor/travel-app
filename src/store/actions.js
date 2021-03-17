@@ -183,7 +183,7 @@ export function updateRating(id,rating) {
  export function updateUserImg(img) {
    console.log(img)
    return async dispatch =>{
-    axios.put(`https://rs-school-travel-app.herokuapp.com/user/upload`,{
+    axios.put(`https://rs-school-travel-app.herokuapp.com/upload`,{
       img
     },{
     headers: {

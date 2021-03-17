@@ -2,12 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux';
 import Container from '../Container';
 import Footer from '../Footer';
+import User from '../User'
 import Header from '../Header';
 import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
 import { fetchUser } from '../../store/actions';
 import queryString from 'querystring';
-import { Redirect } from 'react-router';
 import Settings from './Settings/Settings';
 import Select from '../Select';
 
@@ -21,9 +21,6 @@ const Account = (props) => {
     <Container>
       <Header><Select /></Header>
         <Content>
-          { !props.user &&
-            <Redirect to='/auth'/>
-          }
           { props.pageLoader &&
             <PageLoader />
           }
