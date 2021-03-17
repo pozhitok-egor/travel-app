@@ -15,6 +15,8 @@ import Weather from './Weather';
 import Currency from './Currency';
 import Map from './Map';
 import User from '../User';
+import Select from '../Select';
+import { withNamespaces } from 'react-i18next';
 
 class Country extends Component {
   componentDidMount() {
@@ -25,35 +27,36 @@ class Country extends Component {
     return (
       <Container>
         <Header>
-          <User/>
+          <Select />
+          <User />
         </Header>
-            { this.props.pageLoader &&
-              <PageLoader />
-            }
-            { !this.props.pageLoader && this.props.country &&
-            <Content>
-              <MainBlock>
-                <h1>{this.props.country.name[this.props.lang]}</h1>
-                <p>{this.props.country.capital[this.props.lang]}</p>
-                <Description />
-                <Gallery />
-                <Video />
-              </MainBlock>
-              <Sidebar>
-                <DateTime />
-                <Weather />
-                <Currency />
-                <Map />
-              </Sidebar>
-            </Content>
-            }
-            { !this.props.pageLoader && !this.props.country &&
-              <Content>
-                <h1>
-                  Unable to find country
+        { this.props.pageLoader &&
+          <PageLoader />
+        }
+        { !this.props.pageLoader && this.props.country &&
+          <Content>
+            <MainBlock>
+              <h1>{this.props.country.name[this.props.lang]}</h1>
+              <p>{this.props.country.capital[this.props.lang]}</p>
+              <Description />
+              <Gallery />
+              <Video />
+            </MainBlock>
+            <Sidebar>
+              <DateTime />
+              <Weather />
+              <Currency />
+              <Map />
+            </Sidebar>
+          </Content>
+        }
+        { !this.props.pageLoader && !this.props.country &&
+          <Content>
+            <h1>
+              {this.props.t('no_countries')}
                 </h1>
-              </Content>
-            }
+          </Content>
+        }
         <Footer />
       </Container>
     )
@@ -103,5 +106,5 @@ const mapDispatchToProps = {
   fetchWeather
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Country);
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(Country));
 

@@ -9,6 +9,7 @@ import Content from '../Content/Content';
 import { fetchUser } from '../../store/actions';
 import queryString from 'querystring';
 import Settings from './Settings/Settings';
+import Select from '../Select';
 
 const Account = (props) => {
   const data = queryString.parse(props.location.search.substring(1));
@@ -18,7 +19,7 @@ const Account = (props) => {
   }
   return (
     <Container>
-      <Header><User /></Header>
+      <Header><Select /></Header>
         <Content>
           { props.pageLoader &&
             <PageLoader />

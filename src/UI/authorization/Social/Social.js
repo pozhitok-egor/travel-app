@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components';
 import githubIcon from '../../../assets/icons/github.svg';
+import { withNamespaces } from 'react-i18next';
 
-const Social = () => {
+const Social = (props) => {
   return (
     <SocialBlock>
-      <h1>Or login with:</h1>
+      <h1>{props.t('login_git')}</h1>
       <Icons>
         <a href="https://github.com/login/oauth/authorize?client_id=146d03d9499f8869d11e"><SocialIcon src={githubIcon} alt='github'/></a>
       </Icons>
@@ -30,4 +31,4 @@ const SocialIcon = styled.img`
   width: 40px;
 `;
 
-export default Social;
+export default withNamespaces()(Social);

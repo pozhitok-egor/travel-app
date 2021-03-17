@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { withNamespaces } from 'react-i18next';
 
 function getDate(locale, timezone) {
   const date = new Date();
@@ -23,7 +24,7 @@ function getTime(locale, timezone) {
     second: date.toLocaleString(locale, { second: 'numeric', timeZone: timezone }),
   };
 
-  objTime.hour = (objTime.hour > 23) ? `00` : `${objTime.hour}`; //прикол
+  objTime.hour = (objTime.hour > 23) ? `00` : `${objTime.hour}`;
   objTime.minute = (objTime.minute < 10) ? `0${objTime.minute}` : `${objTime.minute}`;
   objTime.second = (objTime.second < 10) ? `0${objTime.second}` : `${objTime.second}`;
 
@@ -48,7 +49,7 @@ const DateTime = (props) => {
 
   return (
     <DateTimeWrap>
-      <DateTimeTitle>Date & time:</DateTimeTitle>
+      <DateTimeTitle>{props.t('date_time')}</DateTimeTitle>
       <TimeWrap>
         <span>{time.hour[0]}</span>
         <span>{time.hour[1]}</span>
@@ -71,7 +72,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, null)(DateTime);
+export default connect(mapStateToProps, null)(withNamespaces()(DateTime));
 
 const DateTimeWrap =  styled.div`
   margin-bottom: 10px;

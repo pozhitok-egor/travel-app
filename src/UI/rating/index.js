@@ -11,6 +11,8 @@ import starW from '../../assets/icons/star_fill.svg'
 import starD from '../../assets/icons/star_white.svg'
 import { Link } from 'react-router-dom';
 import User from '../User';
+import { withNamespaces } from 'react-i18next';
+import Select from '../Select';
 
 const RowComp = ({ rating }) => {
   const stars = [1, 2, 3, 4, 5]
@@ -66,7 +68,7 @@ class Rating extends Component {
   render() {
     return (
       <Container>
-        <Header><User /></Header>
+        <Header><Select /><User /></Header>
         <Content>
           {this.props.pageLoader &&
             <PageLoader />
@@ -82,7 +84,7 @@ class Rating extends Component {
           {!this.props.pageLoader && !this.props.ratings &&
             <Content>
               <h1>
-                Unable to find rating.
+                {this.props.t('no_ratings')}
               </h1>
             </Content>
           }
@@ -109,7 +111,7 @@ const mapDispatchToProps = {
   fetchCountry
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Rating);
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(Rating));
 
 const RowName = styled.div`
   display: flex;

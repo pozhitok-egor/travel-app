@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 const Description = (props) => {
-  console.log(props);
   return (
     <DescriptionBlock>
       <Image src={props.country.imageUrl} alt={props.country.name[props.lang]}/>
