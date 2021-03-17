@@ -10,6 +10,7 @@ import Registration from './Registration';
 import Login from './Login';
 import queryString from 'querystring';
 import { Redirect } from 'react-router';
+import Select from '../Select';
 
 const Auth = (props) => {
   const data = queryString.parse(props.location.search.substring(1));
@@ -19,7 +20,7 @@ const Auth = (props) => {
   }
   return (
     <Container>
-      <Header></Header>
+      <Header><Select /></Header>
         <Content>
           { props.user && !props.pageLoader &&
             <Redirect to='/'/>

@@ -9,6 +9,7 @@ import { fetchUser } from '../../store/actions';
 import queryString from 'querystring';
 import { Redirect } from 'react-router';
 import Settings from './Settings/Settings';
+import Select from '../Select';
 
 const Account = (props) => {
   const data = queryString.parse(props.location.search.substring(1));
@@ -18,7 +19,7 @@ const Account = (props) => {
   }
   return (
     <Container>
-      <Header></Header>
+      <Header><Select /></Header>
         <Content>
           { !props.user &&
             <Redirect to='/auth'/>
