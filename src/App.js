@@ -22,7 +22,7 @@ const App = ( props ) => {
         { props.user && !props.auth.state && <Route path='/country/:id' component={Country} />}
         { props.user && !props.auth.state && <Route path="/rating/:country/:id" component={Rating} />}
         <Route path='/auth' component={Auth} />
-        <Route path='/account' component={Account} />
+        { props.user && !props.auth.state && <Route path='/account' component={Account} />}
       </Switch>
     </AppBlock>
   )

@@ -8,7 +8,6 @@ import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
 import { fetchUser } from '../../store/actions';
 import queryString from 'querystring';
-import { Redirect } from 'react-router';
 import Settings from './Settings/Settings';
 
 const Account = (props) => {
@@ -21,9 +20,6 @@ const Account = (props) => {
     <Container>
       <Header><User /></Header>
         <Content>
-          { !props.user &&
-            <Redirect to='/auth'/>
-          }
           { props.pageLoader &&
             <PageLoader />
           }

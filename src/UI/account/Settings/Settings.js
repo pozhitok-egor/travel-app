@@ -65,14 +65,27 @@ const Settings = (props) => {
 
   
   const uploadImage = (e) => {
-    console.log(e)
-    props.updateUserImg(e.target.files[0])
-    // const f= new FileReader();
-    // f.onload = ()=> {
-    //   console.log(f.result)
-    //   props.updateUserImg(f.result)
-    // }
-    // f.readAsDataURL(e.target.files[0])
+    // props.updateUserImg(e.target.files[0])
+
+    const files = e.target.files
+    console.log(files[0])
+    const formData = new FormData()
+    formData.append('file', files[0]);
+    console.log(formData.getAll('file'))
+    fetch('https://rs-school-travel-app.herokuapp.com/upload', {
+      method: 'PUT',
+      body: formData,
+      header: {
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+    })
+    .catch(error => {
+      console.error(error)
+    })
   }
 
   return (
