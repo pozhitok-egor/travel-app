@@ -1,0 +1,23 @@
+{
+  "find": "Find",
+  "no_countries": "There are no countries found!",
+  "change_username": "Change username",
+  "no_ratings": "Unable to find rating.",
+  "no_currancy": "No currency exchange rate for",
+  "account": "Account",
+  "login": "Login",
+  "sign_out": "Sign out",
+  "registration": "Registration",
+  "login_git": "Or login with",
+  "password_missmach": "Password_missmach",
+  "repeat_password": "repeat password",
+  "password": "Password",
+  "username": "Username",
+  "date_time": "Date & time",
+  "сhange_username": "Change username",
+  "change_password": "Change password",
+  "confirm": "Confirm",
+  "ok": "OK",
+  "newname":"Please, write new username",
+  "choosephoto":"Choose new photo"
+}

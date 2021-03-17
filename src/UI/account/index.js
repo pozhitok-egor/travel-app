@@ -2,17 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux';
 import Container from '../Container';
 import Footer from '../Footer';
+import User from '../User'
 import Header from '../Header';
 import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
 import { fetchUser } from '../../store/actions';
-import Registration from './Registration';
-import Login from './Login';
 import queryString from 'querystring';
-import { Redirect } from 'react-router';
+import Settings from './Settings/Settings';
 import Select from '../Select';
 
-const Auth = (props) => {
+const Account = (props) => {
   const data = queryString.parse(props.location.search.substring(1));
   if (data.token && !props.auth.state && !props.user) {
     localStorage.setItem('token', data.token);
@@ -22,15 +21,11 @@ const Auth = (props) => {
     <Container>
       <Header><Select /></Header>
         <Content>
-          { props.user && !props.pageLoader &&
-            <Redirect to='/'/>
-          }
           { props.pageLoader &&
             <PageLoader />
           }
           { !props.pageLoader &&
-            props.auth.page === 'login' ?
-            <Login error={data.error}/> : !props.pageLoader && <Registration error={data.error}/>
+            <Settings />
           }
         </Content>
       <Footer />
@@ -51,4 +46,4 @@ const mapDispatchToProps = {
   fetchUser
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

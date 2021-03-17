@@ -4,12 +4,14 @@ import Container from '../Container';
 import Footer from '../Footer';
 import Header from '../Header';
 import Search from './Search';
+import Select from '../Select';
 import { fetchCountries, fetchLanguage } from '../../store/actions';
 import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import User from '../User';
+import { withNamespaces } from 'react-i18next';
 
 class Main extends Component {
   componentDidMount() {
@@ -24,7 +26,7 @@ class Main extends Component {
       : this.props.countries;
     return (
       <Container>
-        <Header><Search /><User /></Header>
+        <Header><Search /><Select /><User /></Header>
           <Content>
             { this.props.pageLoader &&
               <PageLoader />
@@ -44,7 +46,7 @@ class Main extends Component {
             { !this.props.pageLoader && !countries &&
               <Content>
                 <h1>
-                  There are no countries found!
+                  {this.props.t('no_countries')}
                 </h1>
               </Content>
             }
@@ -94,4 +96,4 @@ const mapDispatchToProps = {
   fetchLanguage
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(Main));

@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 import { signOut } from '../../store/actions';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { withNamespaces } from 'react-i18next';
 
 const User = (props) => {
   return (
     <UserBlock>
       <Buttons>
-        <Link to='/'><Button onClick={() => props.signOut()}>Sign Out</Button></Link>
+        <Link to='/'><Button onClick={() => props.signOut()}>{props.t('sign_out')}</Button></Link>
         <Link to='/account'>
-          <Button>Account</Button>
+          <Button>{props.t('account')}</Button>
         </Link>
       </Buttons>
       <Avatar src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`} alt="avatar"/>
@@ -29,7 +30,7 @@ const mapDispatchToProps = {
   signOut
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(User);
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(User));
 
 const UserBlock = styled.div`
   display: flex;

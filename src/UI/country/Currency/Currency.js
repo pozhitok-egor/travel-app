@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { PageLoader } from '../../PageLoader/PageLoader';
 import { fetchCurrency } from '../../../store/actions';
-
+import { withNamespaces } from 'react-i18next';
 
 const Currency = (props) => {
   function prepCurrency(currency) {
@@ -42,7 +42,7 @@ const Currency = (props) => {
       { props.currency && props.currency.isAxiosError && 
         <CurrencyWrap>
           <CurrencyName>
-            No currency exchange rate for {props.country.currency}
+            {props.t('no_currancy')} {props.country.currency}
           </CurrencyName>
         </CurrencyWrap>
       }
@@ -61,7 +61,7 @@ const mapDispatchToProps = {
   fetchCurrency
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Currency);
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(Currency));
 
 const CurrencyBlock = styled.div`
   margin-bottom: 10px;

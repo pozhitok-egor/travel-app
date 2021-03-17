@@ -6,6 +6,7 @@ import Button from '../../Button';
 import Input from '../../Input';
 import { Buttons, Form, Error, Success } from '../Form';
 import Social from '../Social';
+import { withNamespaces } from 'react-i18next';
 
 
 
@@ -35,21 +36,21 @@ const Registration = (props) => {
         setError(error.response.data.message);
       });
     } else {
-      setError("Passwords don't match!")
+      setError(props.t('password_missmach'))
     }
 
   }
 
   return (
     <Form onSubmit={registerUser} type="registration">
-      <h1>Registration</h1>
-      <Input type='text' name="username" placeholder="username"/>
-      <Input type='password' name="password" placeholder="password" autocomplete="new-password"/>
-      <Input type='password' autocomplete="new-password" name="password_repeat" placeholder="repeat password"/>
+      <h1>{props.t('registration')}</h1>
+      <Input type='text' name="username" placeholder={props.t('username')}/>
+      <Input type='password' name="password" placeholder={props.t('password')} autocomplete="new-password"/>
+      <Input type='password' name="password_repeat" placeholder={props.t('repeat_password')} autocomplete="new-password"/>
       <Social />
       <Buttons>
-        <Button type='submit'>Register</Button>
-        <Button type='button' onClick={(e) => props.setLogin()}>Login</Button>
+        <Button type='submit'>{props.t('registration')}</Button>
+        <Button type='button' onClick={(e) => props.setLogin()}>{props.t('login')}</Button>
       </Buttons>
       { error &&
         <Error>{error}</Error>
@@ -72,4 +73,4 @@ const mapDispatchToProps = {
   setUser
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Registration)
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(Registration))
