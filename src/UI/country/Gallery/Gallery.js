@@ -35,7 +35,7 @@ const settingsInit = {
     }]
 };
 
-const Gallery = ({places, lang,...props}) => { 
+const Gallery = ({places, lang,...props}) => {
   const [settings,setSettings] = useState(settingsInit);
   const handle = useFullScreenHandle();
   const [pageLoader, setPageLoader] = useState(true);
@@ -44,17 +44,17 @@ const Gallery = ({places, lang,...props}) => {
     if(places === 1) setSettings(prev=>{return {...prev, slidesToShow:1,  nextArrow: <SampleNextArrow isFullScren={true}/>, prevArrow: <SamplePrevArrow isFullScren={true}/>}})
     if(places.length) {
     places.forEach((el, index) => {
-      const src = el.imageUrl 
-      const primaryImage = new Image() 
-      primaryImage.onload = () => { 
+      const src = el.imageUrl
+      const primaryImage = new Image()
+      primaryImage.onload = () => {
         setPageLoader(false)
       }
-      primaryImage.src = src 
+      primaryImage.src = src
     }) }
   },[places])
-  
+
   const handleClickImg = ()=> {
-    if(!handle.active) handle.enter(); 
+    if(!handle.active) handle.enter();
     else return 0
   }
 
@@ -63,14 +63,14 @@ const Gallery = ({places, lang,...props}) => {
       if(state) setSettings(prev=>{return {...prev, slidesToShow:1,  nextArrow: <SampleNextArrow isFullScren={true}/>, prevArrow: <SamplePrevArrow isFullScren={true}/>}})
       else setSettings(prev=>{return {...prev, slidesToShow:2,  nextArrow: <SampleNextArrow isFullScren={false}/>, prevArrow: <SamplePrevArrow isFullScren={false}/> }})
     }
-  }  
+  }
 
-  const handleChangeRating = (id,rating) => {    
+  const handleChangeRating = (id,rating) => {
     props.updateRating(id,rating)
   }
   return (
     <GalleryBlock>
-      { pageLoader && places.length ? 
+      { pageLoader && places.length ?
               <PageLoader /> :
       <FullScreen handle={handle} onChange={handleChangeFullScrenn}>
         <Slider {...settings}>
@@ -79,21 +79,21 @@ const Gallery = ({places, lang,...props}) => {
             <GalleryItemImg src={el.imageUrl} alt={el.name[lang]} onClick={handleClickImg} isFullScren={handle.active}></GalleryItemImg>
             <Name>{el.name[lang]}</Name>
             {handle.active ?<Description isFullScren={handle.active}>{el.description[lang]}</Description>: null}
-            <RatingBlock> 
+            <RatingBlock>
             <Rating value={el.rating} handleChange={handleChangeRating} id={el._id} />
             <RatingTotal isFullScren={handle.active}>{Number(el.rating).toFixed(2)}</RatingTotal>
             <Link to= {`/rating/${el.countryId}/${el._id}`}>
               <ListImg src={list} alt="rating"></ListImg>
             </Link>
             </RatingBlock>
-            
+
           </GalleryItem>
         })}
         </Slider>
         {handle.active ? <ExitButton onClick={handle.exit}></ExitButton> : null}
       </FullScreen>
       }
-    </GalleryBlock>    
+    </GalleryBlock>
   )
 }
 
@@ -104,7 +104,7 @@ const Rating = ({id, handleChange, value})=> {
   return (
     <RatingBlock onMouseOut={()=>{return !checked ? setValueHover(0): null}} >
       {mass.map((el,i)=>{
-        return <RatingImg key={i} src={(valueHover || value)>=el ? starW: starD} alt='star' 
+        return <RatingImg key={i} src={(valueHover || value)>=el ? starW: starD} alt='star'
         onMouseOver={()=>{return !checked ? setValueHover(el): null}}
         onClick={()=>{handleChange(id,el); setChecked(true); setValueHover(el)}}>
         </RatingImg>
@@ -113,7 +113,7 @@ const Rating = ({id, handleChange, value})=> {
   )
 }
 const GalleryBlock =styled.div`
-margin: 15px 0 30px;
+margin: 15px 20px 30px;
 `;
 const GalleryItem =styled.div`
 height: ${({isFullScren}) => isFullScren ? '70vh' : '200px' };
