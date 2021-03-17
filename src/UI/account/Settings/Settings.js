@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { setUser, updateUserImg } from '../../../store/actions';
+import { setUser } from '../../../store/actions';
 import Input from '../../Input';
 import { Avatar, Error, Form, Success,Group } from '../Styled';
 import Button from '../../Button';
@@ -23,7 +23,6 @@ function dataURLtoFile(dataurl, filename) {
 }
 
 const Settings = (props, { t }) => {
-  console.log(props.error)
   const [errorN, setErrorN] = useState(props.error);
   const [successN, setSuccessN] = useState();
   const [errorP, setErrorP] = useState(props.error);
@@ -117,7 +116,7 @@ const Settings = (props, { t }) => {
               exportSize = {256}
               onCrop = {(file) => setImage(file)}
               onClose={() => setImage(null)}
-              labelStyle = {{fontFamily: 'Balsamiq Sans'}}
+              labelStyle = {{fontFamily: 'Balsamiq Sans', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', cursor: 'pointer'}}
               borderStyle= {{border: 'none'}}
               src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`}
             />
@@ -164,8 +163,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  setUser,
-  updateUserImg
+  setUser
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(Settings))

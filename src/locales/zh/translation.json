@@ -19,5 +19,6 @@
   "confirm": "確認",
   "ok": "好的",
   "newname":"请写新的用户名",
-  "choosephoto":"选择新照片"
+  "choosephoto":"选择新照片",
+  "upload": "下载"
 }

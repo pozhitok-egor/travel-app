@@ -19,5 +19,6 @@
   "confirm": "Confirm",
   "ok": "OK",
   "newname":"Please, write new username",
-  "choosephoto":"Choose new photo"
+  "choosephoto":"Choose new photo",
+  "upload": "Upload"
 }

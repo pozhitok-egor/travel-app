@@ -67,7 +67,7 @@ export function fetchCountry(id, lang) {
 
 export function fetchWeather(city, lang) {
   return async dispatch => {
-    axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=049d6bfecf5f28f90a2cd75d513cb01f&lang=${lang}`,{
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=049d6bfecf5f28f90a2cd75d513cb01f&lang=${lang}`,{
     headers: {
       accept: 'application/json'
     }
@@ -172,27 +172,10 @@ export function updateRating(id,rating) {
     },{
     headers: {
         "Authorization": `Bearer ${localStorage.getItem('token')}`
-    }}     
+    }}
     ).then((res) => {
       dispatch({type: UPDATE_RATING_PLACES, payload: {id: id, rating: res.data.placeRating}});
     }).catch((err) => {
     })
   }
 }
-
- export function updateUserImg(img) {
-   console.log(img)
-   return async dispatch =>{
-    axios.put(`https://rs-school-travel-app.herokuapp.com/upload`,{
-      img
-    },{
-    headers: {
-        "Authorization": `Bearer ${localStorage.getItem('token')}`
-    }}     
-    ).then((res) => {
-      console.log(res)
-    }).catch((err) => {
-      console.log(err)
-    })
-   } 
- }

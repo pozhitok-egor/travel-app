@@ -31,7 +31,7 @@ function placesReducer(state = null, action) {
   switch (action.type) {
     case FETCH_PLACES:
       return action.payload;
-    case UPDATE_RATING_PLACES: 
+    case UPDATE_RATING_PLACES:
       return state.map(el=> el._id === action.payload.id ? {...el, rating : action.payload.rating} : el)
     default: return state;
   }
@@ -61,7 +61,7 @@ function currencyReducer(state = null, action) {
   }
 }
 
-function languageReducer(state = localStorage.getItem("lang") || "en", action) {
+function languageReducer(state = localStorage.getItem("lang") || "ru", action) {
   switch (action.type) {
     case FETCH_LANGUAGE:
       return action.payload;

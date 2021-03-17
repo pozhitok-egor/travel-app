@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux';
 import Container from '../Container';
 import Footer from '../Footer';
-import User from '../User'
 import Header from '../Header';
 import { PageLoader } from '../PageLoader/PageLoader';
 import Content from '../Content/Content';
@@ -10,6 +9,7 @@ import { fetchUser } from '../../store/actions';
 import queryString from 'querystring';
 import Settings from './Settings/Settings';
 import Select from '../Select';
+import User from '../User';
 
 const Account = (props) => {
   const data = queryString.parse(props.location.search.substring(1));
@@ -19,7 +19,7 @@ const Account = (props) => {
   }
   return (
     <Container>
-      <Header><Select /></Header>
+      <Header><Select /><User /></Header>
         <Content>
           { props.pageLoader &&
             <PageLoader />

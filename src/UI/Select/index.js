@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { fetchLanguage } from '../../store/actions';
+import { fetchLanguage, fetchWeather } from '../../store/actions';
 import i18n from '../../i18n';
 import styled from 'styled-components';
 
@@ -8,6 +8,9 @@ const User = (props) => {
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng)
     props.fetchLanguage(lng)
+    if (props.country) {
+      props.fetchWeather(`${props.country.capital.en}, ${props.country.ISOCode}`, lng)
+    }
   }
   return (
     <Select value={props.lang} onChange={(event) => changeLanguage(event.target.value)}>
@@ -36,7 +39,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  fetchLanguage
+  fetchLanguage,
+  fetchWeather
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);
