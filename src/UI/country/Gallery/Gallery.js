@@ -99,12 +99,12 @@ const Gallery = ({places, lang,...props}) => {
 
 const Rating = ({id, handleChange, value})=> {
   const mass= [1,2,3,4,5];
-  const [valueHover, setValueHover]= useState(value);
+  const [valueHover, setValueHover]= useState(null);
   const [checked, setChecked]= useState(false)
   return (
     <RatingBlock onMouseOut={()=>{return !checked ? setValueHover(0): null}} >
       {mass.map((el,i)=>{
-        return <RatingImg key={i} src={valueHover>=el ? starW: starD} alt='star' 
+        return <RatingImg key={i} src={(valueHover || value)>=el ? starW: starD} alt='star' 
         onMouseOver={()=>{return !checked ? setValueHover(el): null}}
         onClick={()=>{handleChange(id,el); setChecked(true); setValueHover(el)}}>
         </RatingImg>
