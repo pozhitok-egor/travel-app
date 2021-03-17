@@ -2,10 +2,24 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { setUser,updateUserImg } from '../../../store/actions';
 import Input from '../../Input';
-import { Avatar, Error, Form, Success, InputFile,Label,Group } from '../Styled';
+import { Avatar, Error, Form, Success,Group } from '../Styled';
 import Button from '../../Button';
 import axios from 'axios';
+import AvatarEdit from 'react-avatar-edit'
 
+function dataURLtoFile(dataurl, filename) {
+  var arr = dataurl.split(','),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+
+  while(n--){
+      u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, {type:mime});
+}
 
 const Settings = (props) => {
   console.log(props.error)
@@ -13,7 +27,9 @@ const Settings = (props) => {
   const [successN, setSuccessN] = useState();
   const [errorP, setErrorP] = useState(props.error);
   const [successP, setSuccessP] = useState();
-  const [username, setUsername]= useState(props.user.username)
+  const [username, setUsername]= useState(props.user.username);
+  const [image, setImage]= useState();
+  const [errorI, setErrorI] = useState(props.error);
 
   const updateUserP = (e) => {
     e.preventDefault();
@@ -36,7 +52,7 @@ const Settings = (props) => {
     });
     } else {
       setErrorP("Passwords don't match!");
-      }
+    }
   }
 
   const updateUserN = (e) => {
@@ -44,7 +60,6 @@ const Settings = (props) => {
     setErrorN();
     setSuccessN();
     const name = username;
-    console.log()
     if(name !== props.user.username) {
     axios.put('https://rs-school-travel-app.herokuapp.com/user/', {username:name}, {
       headers: {
@@ -58,70 +73,91 @@ const Settings = (props) => {
     .catch((error) => {
       setErrorN(error.response.data.message);
     });
+    } else {
+      setErrorN("Use new username!");
     }
   }
 
-
-
-  
   const uploadImage = (e) => {
-    // props.updateUserImg(e.target.files[0])
-
-    const files = e.target.files
-    console.log(files[0])
-    const formData = new FormData()
-    formData.append('file', files[0]);
-    console.log(formData.getAll('file'))
-    fetch('https://rs-school-travel-app.herokuapp.com/upload', {
-      method: 'PUT',
-      body: formData,
-      header: {
-        "Authorization": `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-    })
-    .catch(error => {
-      console.error(error)
-    })
+    e.preventDefault();
+    if ( image ) {
+      const file = dataURLtoFile(image,'avatar.png')
+      const formData = new FormData()
+      formData.append('avatar', file);
+      axios.put('https://rs-school-travel-app.herokuapp.com/user/upload', formData,
+      {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(data => {
+        window.location = '/account';
+      })
+      .catch(error => {
+        setErrorI(error.response.data.message)
+      })
+    } else {
+      setErrorI('Choose Photo');
+    }
   }
 
   return (
-    <Form onSubmit={updateUserP}>
-    <Label>
-        <InputFile type="file" onChange={(e)=>uploadImage(e)} />
-        <Avatar src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`} alt=""/>
-    </Label>
-    <h1>Change username</h1>
-    <Group>
-      <Input type='text' value={username} onChange={e=>setUsername(e.target.value)} name='username' placeholder='username' autocomplete='username'/>
-      <Button onClick={updateUserN}>Ok</Button>
-    </Group>
-      { errorN &&
-        <Error>{errorN}</Error>
-      }
-      { successN &&
-        <Success>{successN}</Success>
-      }
-      <h1>Change password</h1>
-      <Input type='password'  name="password" placeholder="password" autocomplete="new-password"/>
-      <Input type='password' autocomplete="new-password" name="password_repeat" placeholder="repeat password"/>
-        <Button type='submit'>Confirm</Button>
-      { errorP &&
-        <Error>{errorP}</Error>
-      }
-      { successP &&
-        <Success>{successP}</Success>
-      }
-    </Form>
+    <div>
+      <Form onSubmit={(e) => uploadImage(e)}>
+          <Avatar>
+            <AvatarEdit
+              width={200}
+              height={200}
+              cropRadius={100}
+              shadingColor = {'rgb(38,35,40)'}
+              cropColor = {'rgb(20,127,235)'}
+              closeIconColor = {'rgb(20,127,235)'}
+              exportAsSquare = {true}
+              exportSize = {256}
+              onCrop = {(file) => setImage(file)}
+              onClose={() => setImage(null)}
+              labelStyle = {{fontFamily: 'Balsamiq Sans'}}
+              borderStyle= {{border: 'none'}}
+              src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`}
+            />
+          </Avatar>
+          <Button type='submit'>Upload</Button>
+          { errorI &&
+            <Error>{errorI}</Error>
+          }
+      </Form>
+      <Form onSubmit={updateUserN}>
+        <h1>Change username</h1>
+        <Group>
+          <Input type='text' value={username} onChange={e=>setUsername(e.target.value)} name='username' placeholder='username' autocomplete='username'/>
+          <Button type='submit'>Ok</Button>
+        </Group>
+        { errorN &&
+          <Error>{errorN}</Error>
+        }
+        { successN &&
+          <Success>{successN}</Success>
+        }
+      </Form>
+      <Form onSubmit={updateUserP}>
+        <h1>Change password</h1>
+        <Input type='password'  name="password" placeholder="password" autocomplete="new-password"/>
+        <Input type='password' autocomplete="new-password" name="password_repeat" placeholder="repeat password"/>
+          <Button type='submit'>Confirm</Button>
+        { errorP &&
+          <Error>{errorP}</Error>
+        }
+        { successP &&
+          <Success>{successP}</Success>
+        }
+      </Form>
+    </div>
   )
 }
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth,    
+    auth: state.auth,
     user: state.user
   }
 }
