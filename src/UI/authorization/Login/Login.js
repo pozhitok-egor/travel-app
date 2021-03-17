@@ -6,6 +6,7 @@ import { Buttons, Error, Form, Success } from '../Form';
 import Button from '../../Button';
 import axios from 'axios';
 import Social from '../Social';
+import { withNamespaces } from 'react-i18next';
 
 
 const Login = (props) => {
@@ -35,13 +36,13 @@ const Login = (props) => {
 
   return (
     <Form onSubmit={loginUser}>
-      <h1>Login</h1>
-      <Input type='text' name='username' placeholder='username' autocomplete='username'/>
-      <Input type='password' name='password' placeholder='password' autocomplete='current-password'/>
+      <h1>{props.t('login')}</h1>
+      <Input type='text' name='username' placeholder={props.t('username')} autocomplete='username'/>
+      <Input type='password' name='password' placeholder={props.t('password')} autocomplete='current-password'/>
       <Social />
       <Buttons>
-        <Button type='submit'>Login</Button>
-        <Button type='button' onClick={(e) => props.setRegistration()}>Registration</Button>
+        <Button type='submit'>{props.t('login')}</Button>
+        <Button type='button' onClick={(e) => props.setRegistration()}>{props.t('registration')}</Button>
       </Buttons>
       { error &&
         <Error>{error}</Error>
@@ -64,4 +65,4 @@ const mapDispatchToProps = {
   setUser
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(Login))

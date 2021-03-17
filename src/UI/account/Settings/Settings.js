@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { setUser,updateUserImg } from '../../../store/actions';
+import { setUser, updateUserImg } from '../../../store/actions';
 import Input from '../../Input';
 import { Avatar, Error, Form, Success,Group } from '../Styled';
 import Button from '../../Button';
 import axios from 'axios';
-import AvatarEdit from 'react-avatar-edit'
+import AvatarEdit from 'react-avatar-edit';
+import { withNamespaces } from 'react-i18next';
 
 function dataURLtoFile(dataurl, filename) {
   var arr = dataurl.split(','),
@@ -21,7 +22,7 @@ function dataURLtoFile(dataurl, filename) {
   return new File([u8arr], filename, {type:mime});
 }
 
-const Settings = (props) => {
+const Settings = (props, { t }) => {
   console.log(props.error)
   const [errorN, setErrorN] = useState(props.error);
   const [successN, setSuccessN] = useState();
@@ -38,20 +39,20 @@ const Settings = (props) => {
     const password = e.target.elements.password.value;
     const repeat = e.target.elements.password_repeat.value;
     if (password === repeat) {
-    axios.put('https://rs-school-travel-app.herokuapp.com/user/', {password}, {
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    .then((res) => {
-      setSuccessP(res.data.message);
-      props.setUser(res.data.user);
-    })
-    .catch((error) => {
-        setErrorP(error.response.data.message);
-    });
+      axios.put('https://rs-school-travel-app.herokuapp.com/user/', { password }, {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+        .then((res) => {
+          setSuccessP(res.data.message);
+          props.setUser(res.data.user);
+        })
+        .catch((error) => {
+          setErrorP(error.response.data.message);
+        });
     } else {
-      setErrorP("Passwords don't match!");
+      setErrorP(props.t('passwords_missmatch'));
     }
   }
 
@@ -74,7 +75,7 @@ const Settings = (props) => {
       setErrorN(error.response.data.message);
     });
     } else {
-      setErrorN("Use new username!");
+      setErrorN(props.t('newname'));
     }
   }
 
@@ -97,7 +98,7 @@ const Settings = (props) => {
         setErrorI(error.response.data.message)
       })
     } else {
-      setErrorI('Choose Photo');
+      setErrorI(props.t('choosephoto'));
     }
   }
 
@@ -121,16 +122,16 @@ const Settings = (props) => {
               src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, props.user.image.data.data))}`}
             />
           </Avatar>
-          <Button type='submit'>Upload</Button>
+          <Button type='submit'>{props.t('upload')}</Button>
           { errorI &&
             <Error>{errorI}</Error>
           }
       </Form>
       <Form onSubmit={updateUserN}>
-        <h1>Change username</h1>
+        <h1>{props.t('сhange_username')}</h1>
         <Group>
-          <Input type='text' value={username} onChange={e=>setUsername(e.target.value)} name='username' placeholder='username' autocomplete='username'/>
-          <Button type='submit'>Ok</Button>
+          <Input type='text' value={username} onChange={e=>setUsername(e.target.value)} name='username' placeholder={props.t('username')}  autocomplete='username'/>
+          <Button type='submit'>{props.t('ok')}</Button>
         </Group>
         { errorN &&
           <Error>{errorN}</Error>
@@ -140,10 +141,10 @@ const Settings = (props) => {
         }
       </Form>
       <Form onSubmit={updateUserP}>
-        <h1>Change password</h1>
-        <Input type='password'  name="password" placeholder="password" autocomplete="new-password"/>
-        <Input type='password' autocomplete="new-password" name="password_repeat" placeholder="repeat password"/>
-          <Button type='submit'>Confirm</Button>
+        <h1>{props.t('change_password')}</h1>
+        <Input type='password'  name="password" placeholder={props.t('password')}  autocomplete="new-password"/>
+        <Input type='password' autocomplete="new-password" name="password_repeat" placeholder={props.t('repeat_password')}/>
+          <Button type='submit'>{props.t('confirm')}</Button>
         { errorP &&
           <Error>{errorP}</Error>
         }
@@ -167,4 +168,4 @@ const mapDispatchToProps = {
   updateUserImg
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings)
+export default connect(mapStateToProps, mapDispatchToProps)(withNamespaces()(Settings))

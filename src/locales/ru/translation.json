@@ -1,0 +1,23 @@
+{
+  "find": "Найти",
+  "no_countries": "Никаких стран не найдено!",
+  "change_username": "Изменить никнейм",
+  "no_ratings": "Невозможно найти рейтинг.",
+  "no_currancy": "Нет данных курса валюты для",
+  "account": "Аккаутн",
+  "sign_out": "Выйти",
+  "login": "Войти",
+  "registration": "Регистрания",
+  "login_git": "Или войти через",
+  "password_missmach": "Парли не совпадают",
+  "repeat_password": "Повтор пароля",
+  "password": "Пароль",
+  "username": "Имя пользователя",
+  "date_time": "Дата и время",
+  "сhange_username": "Изменить имя пользователя",
+  "change_password": "Изменить пароль",
+  "confirm": "Подтвердить",
+  "ok": "ОК",
+  "newname":"Введите новое имя",
+  "choosephoto":"Выберите новое фото"
+}
