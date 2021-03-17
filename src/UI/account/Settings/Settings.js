@@ -87,7 +87,7 @@ const Settings = (props, { t }) => {
       <h1>{props.t('сhange_username')}</h1>
       <Group>
         <Input type='text' value={username} onChange={e => setUsername(e.target.value)} name='username' placeholder={props.t('username')} autocomplete='username' />
-        <Button onClick={updateUserN}>OK</Button>
+        <Button onClick={updateUserN}>{props.t('ok')}</Button>
       </Group>
       { errorN &&
         <Error>{errorN}</Error>
