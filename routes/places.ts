@@ -5,6 +5,6 @@ const router = Router();
 
 router.get('/:id', places.getPlaces);
 router.post('/', places.addPlaces);
-router.put('/', places.upgradePlaces);
+router.put('/:id', places.upgradePlaces);
 
 export default router;
