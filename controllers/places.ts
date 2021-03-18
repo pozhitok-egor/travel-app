@@ -31,7 +31,29 @@ const upgradePlaces = async (req: Request, res: Response, next: NextFunction) =>
       message: "Unauthorized"
     });
   }
-  Places.findOneAndUpdate({_id: req.params.id}, {countryId: new mongoose.Types.ObjectId(countryId), name, description, imageUrl, rating})
+  const data = {
+    countryId: new mongoose.Types.ObjectId(countryId),
+    name,
+    description,
+    imageUrl,
+    rating
+  }
+  if (!countryId) {
+    delete data.countryId
+  }
+  if (!name) {
+    delete data.name
+  }
+  if (!description) {
+    delete data.description
+  }
+  if (!imageUrl) {
+    delete data.imageUrl
+  }
+  if (!rating) {
+    delete data.rating
+  }
+  Places.findOneAndUpdate({_id: req.params.id}, data)
   .exec()
   .then(() => {
     return res.status(202).json({
