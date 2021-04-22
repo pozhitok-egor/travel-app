@@ -53,7 +53,7 @@ export function fetchCountry(id, lang) {
     }
     }).then((res) => {
       dispatch(fetchWeather(`${res.data.country.capital.en}, ${res.data.country.ISOCode}`, lang));
-      dispatch(fetchCurrency(res.data.country.currency));
+      dispatch(fetchCurrency());
       dispatch({type: FETCH_COUNTRY, payload: res.data.country});
       dispatch({type: FETCH_PLACES, payload: res.data.places})
       dispatch(loaderDeactivate());
@@ -108,9 +108,9 @@ export function authState(state) {
   }
 }
 
-export function fetchCurrency(currency) {
+export function fetchCurrency() {
   return async dispatch => {
-    axios.get(`https://api.exchangeratesapi.io/latest?base=${currency}`,{
+    axios.get(`https://www.cbr-xml-daily.ru/latest.js`,{
     headers: {
       accept: 'application/json'
     }
