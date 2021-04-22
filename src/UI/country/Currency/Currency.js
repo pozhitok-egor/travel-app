@@ -8,11 +8,15 @@ import { withNamespaces } from 'react-i18next';
 const Currency = (props) => {
   function prepCurrency(currency) {
     if (currency === props.country.currency) {
-      return (currency === 'RUB') ? '100' : '1';
+      return (currency === 'RUB') ? 100 : 1;
     }
-
-    const rates = (currency === 'RUB') ? (props.currency.rates[currency] / 100) : props.currency.rates[currency];
-    return (1 / rates).toFixed(2);
+    if(currency !== 'RUB' && props.country.currency === 'RUB') {
+      return Math.trunc(1/props.currency.rates[currency] * 100) / 100;
+    }
+    const rates = (currency === 'RUB')
+      ? props.currency.rates[props.country.currency] * 100
+      : props.currency.rates[props.country.currency] / props.currency.rates[currency];
+    return Math.trunc(rates * 100) / 100;
   }
 
   return (
@@ -20,10 +24,10 @@ const Currency = (props) => {
       { !props.currency &&
         <PageLoader />
       }
-      { props.currency && !props.currency.isAxiosError &&
+      { props.currency && (props.country.currency in props.currency.rates || props.country.currency === 'RUB') &&
         <CurrencyWrap>
           <CurrencyName>
-            { props.currency.base }
+            { props.country.currency }
           </CurrencyName>
           <CurrencyItem>
             <div>1 USD</div>
@@ -39,7 +43,7 @@ const Currency = (props) => {
           </CurrencyItem>
         </CurrencyWrap>
       }
-      { props.currency && props.currency.isAxiosError && 
+      { props.currency && (!(props.country.currency in props.currency.rates) && props.country.currency !== 'RUB') &&
         <CurrencyWrap>
           <CurrencyName>
             {props.t('no_currancy')} {props.country.currency}
