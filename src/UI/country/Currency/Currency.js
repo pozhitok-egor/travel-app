@@ -11,20 +11,23 @@ const Currency = (props) => {
       return (currency === 'RUB') ? 100 : 1;
     }
     if(currency !== 'RUB' && props.country.currency === 'RUB') {
-      return Math.trunc(1/props.currency.rates[currency] * 100) / 100;
+      return Math.trunc(props.currency.Valute[currency].Value * 100) / 100;
     }
     const rates = (currency === 'RUB')
-      ? props.currency.rates[props.country.currency] * 100
-      : props.currency.rates[props.country.currency] / props.currency.rates[currency];
+      ? 100 / props.currency.Valute[props.country.currency].Value
+      : props.currency.Valute[currency].Value / props.currency.Valute[props.country.currency].Value;
     return Math.trunc(rates * 100) / 100;
   }
 
   return (
     <CurrencyBlock>
+      {
+        console.log(props.currency)
+      }
       { !props.currency &&
         <PageLoader />
       }
-      { props.currency && (props.country.currency in props.currency.rates || props.country.currency === 'RUB') &&
+      { props.currency && (props.country.currency in props.currency.Valute || props.country.currency === 'RUB') &&
         <CurrencyWrap>
           <CurrencyName>
             { props.country.currency }
@@ -43,7 +46,7 @@ const Currency = (props) => {
           </CurrencyItem>
         </CurrencyWrap>
       }
-      { props.currency && (!(props.country.currency in props.currency.rates) && props.country.currency !== 'RUB') &&
+      { props.currency && (!(props.country.currency in props.currency.Valute) && props.country.currency !== 'RUB') &&
         <CurrencyWrap>
           <CurrencyName>
             {props.t('no_currancy')} {props.country.currency}

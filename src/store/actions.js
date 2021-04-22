@@ -110,7 +110,7 @@ export function authState(state) {
 
 export function fetchCurrency() {
   return async dispatch => {
-    axios.get(`https://www.cbr-xml-daily.ru/latest.js`,{
+    axios.get(`https://www.cbr-xml-daily.ru/daily_json.js`,{
     headers: {
       accept: 'application/json'
     }
