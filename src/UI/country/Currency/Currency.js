@@ -21,9 +21,6 @@ const Currency = (props) => {
 
   return (
     <CurrencyBlock>
-      {
-        console.log(props.currency)
-      }
       { !props.currency &&
         <PageLoader />
       }
